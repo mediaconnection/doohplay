@@ -1,0 +1,24 @@
+import * as React from "react"
+
+function cn(...classes: (string | undefined)[]) {
+  return classes.filter(Boolean).join(" ")
+}
+
+const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
+  ({ className, type = "text", ...props }, ref) => (
+    <input
+      type={type}
+      ref={ref}
+      className={cn(
+        "flex h-9 w-full rounded-md border border-slate-200 bg-white px-3 py-1 text-sm shadow-sm",
+        "placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900",
+        "disabled:cursor-not-allowed disabled:opacity-50",
+        className
+      )}
+      {...props}
+    />
+  )
+)
+Input.displayName = "Input"
+
+export { Input }
