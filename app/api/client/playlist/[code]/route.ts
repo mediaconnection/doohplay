@@ -2,7 +2,13 @@ export const dynamic = "force-dynamic"
 export const fetchCache = "force-no-store"
 export const revalidate = 0
 
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js"
+
+function safeString(value: unknown): string | null {
+  if (typeof value !== "string") return null
+  const trimmed = value.trim()
+  return trimmed.length > 0 ? trimmed : null
+}
 
 function normalizePlaylistItem(item: any) {
   const assetUrl = item.asset_url ?? item.url ?? null
@@ -16,11 +22,20 @@ function normalizePlaylistItem(item: any) {
   }
 }
 
-async function resolveScreen(supabase: any, screenId: string) {
+function getSupabaseClient() {
+  const url = safeString(process.env.NEXT_PUBLIC_SUPABASE_URL)
+  const serviceRoleKey = safeString(process.env.SUPABASE_SERVICE_ROLE_KEY)
+
+  if (!url || !serviceRoleKey) return null
+
+  return createClient(url, serviceRoleKey)
+}
+
+async function resolveScreen(supabase: any, code: string) {
   const byId = await supabase
     .from("screens")
     .select("playlist_id")
-    .eq("id", screenId)
+    .eq("id", code)
     .maybeSingle()
 
   if (byId.error) {
@@ -37,7 +52,7 @@ async function resolveScreen(supabase: any, screenId: string) {
     const byCode = await supabase
       .from("screens")
       .select("playlist_id")
-      .eq(column, screenId)
+      .eq(column, code)
       .maybeSingle()
 
     if (!byCode.error && byCode.data?.playlist_id) {
@@ -71,8 +86,8 @@ function normalizeCampaignItem(campaign: any, position: number) {
     type: "video",
     asset_url: assetUrl,
     url: assetUrl,
-    status: campaign.status ?? "approved",
     active: campaign.is_active !== false,
+    status: campaign.status ?? "approved",
     duration: campaign.duration_seconds ?? 15,
     campaign_id: campaign.id,
     position,
@@ -92,11 +107,11 @@ function isPlayableCampaign(campaign: any) {
     !mediaUrl.includes("your-project-id")
 }
 
-async function fetchCampaignFallbackItems(supabase: any, screenId: string) {
+async function fetchCampaignFallbackItems(supabase: any, code: string) {
   const { data: campaigns, error } = await supabase
     .from("campaigns")
     .select("*")
-    .or(`player_code.is.null,player_code.eq.${screenId}`)
+    .or(`player_code.is.null,player_code.eq.${code}`)
     .order("priority", { ascending: true })
     .order("created_at", { ascending: false })
 
@@ -109,69 +124,48 @@ async function fetchCampaignFallbackItems(supabase: any, screenId: string) {
     .map(normalizeCampaignItem)
 }
 
-export async function GET(req: Request) {
-
+export async function GET(
+  _req: Request,
+  context: { params: Promise<{ code: string }> }
+) {
   try {
+    const { code } = await context.params
+    const screenCode = safeString(code)
 
-    const { searchParams } = new URL(req.url);
-    const screenId = searchParams.get("code") ?? searchParams.get("screen");
-
-    if (!screenId) {
-      return Response.json(
-        { error: "screen required" },
-        { status: 400 }
-      );
+    if (!screenCode) {
+      return Response.json({ error: "code required" }, { status: 400 })
     }
 
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
+    const supabase = getSupabaseClient()
 
-    // ------------------------------------------------
-    // SCREEN
-    // ------------------------------------------------
+    if (!supabase) {
+      return Response.json({ error: "supabase env missing" }, { status: 500 })
+    }
 
-    const screen = await resolveScreen(supabase, screenId)
+    const screen = await resolveScreen(supabase, screenCode)
 
     if (!screen?.playlist_id) {
-      const campaignItems = await fetchCampaignFallbackItems(supabase, screenId)
+      const campaignItems = await fetchCampaignFallbackItems(supabase, screenCode)
 
       return Response.json({
         items: campaignItems,
         slides: campaignItems,
-      });
-
+        playlist: campaignItems,
+      })
     }
-
-    // ------------------------------------------------
-    // PLAYLIST ITEMS
-    // ------------------------------------------------
 
     const playlistItems = await fetchPlaylistItems(supabase, screen.playlist_id)
     const items = playlistItems.length > 0
       ? playlistItems
-      : await fetchCampaignFallbackItems(supabase, screenId)
+      : await fetchCampaignFallbackItems(supabase, screenCode)
 
-    return Response.json({
-      items,
-      slides: items,
-      playlist: items,
-    });
-
-  } catch (err: any) {
-
-    console.error("PLAYER PLAYLIST ERROR:", err);
+    return Response.json({ items, slides: items, playlist: items })
+  } catch (error: any) {
+    console.error("CLIENT PLAYLIST ERROR:", error)
 
     return Response.json(
-      { error: err.message },
+      { error: error?.message ?? "playlist failed" },
       { status: 500 }
-    );
-
+    )
   }
-
 }
-
-
-
-
