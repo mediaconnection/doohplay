@@ -22,7 +22,7 @@ const FAQ = [
   },
   {
     q: "O que exatamente o selo confirma?",
-    a: "Que o player está pronto tecnicamente e que o instalador confirmou, no cadastro da tela, que existe um receptor ou conversor DTV+ externo conectado a ela. Não é uma leitura automática de hardware — hoje não existe forma de um player web/WebView detectar sozinho o que está plugado na cadeia HDMI da TV.",
+    a: "Duas coisas, nenhuma delas é decodificar o sinal de TV 3.0: que o instalador confirmou, no cadastro da tela, que existe um receptor ou conversor DTV+ externo conectado a ela, e que o player já suporta mostrar esse selo e, quando o suporte a VVC estiver ativo, priorizar essa variante nos próprios conteúdos exibidos. Quem decodifica a transmissão de TV 3.0 é o conversor externo — hardware de terceiro, não o DOOHPLAY. Não é uma leitura automática de hardware — hoje não existe forma de um player web/WebView detectar sozinho o que está plugado na cadeia HDMI da TV.",
   },
   {
     q: "Preciso comprar algum equipamento?",

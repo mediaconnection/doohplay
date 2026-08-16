@@ -33,18 +33,25 @@
 - **Não é** detecção automática de hardware. Não existe API de navegador
   para consultar o que está conectado na cadeia HDMI de uma TV — o selo
   reflete uma declaração do instalador, não uma leitura de sensor.
+- **Não é** decodificação do sinal de TV 3.0 pelo player DOOHPLAY. Quem
+  decodifica a transmissão é o conversor/receptor externo — hardware de
+  terceiro, sem nenhuma relação de software com o DOOHPLAY. O player não
+  processa esse sinal; ele só reflete a configuração cadastrada e mostra
+  o selo.
 - **Não é** datacasting nem distribuição de conteúdo via espectro de TV —
   isso depende de parceria de espectro, hoje inexistente, e fica em
   horizonte mais distante do roadmap.
 
 ## Texto para proposta comercial (copiar e adaptar)
 
-> A tela [NOME DO CLIENTE] já roda no player DOOHPLAY, que é compatível
-> com o novo padrão brasileiro de TV (TV 3.0 / DTV+), com suporte ao
-> codec de vídeo mais recente do setor (VVC) em preparação. Isso significa
-> que, à medida que o padrão avançar comercialmente no Brasil, essa tela
-> já está tecnicamente preparada para acompanhar essa evolução — sem
-> necessidade de trocar o player ou o software.
+> A tela [NOME DO CLIENTE] já roda no player DOOHPLAY, que sinaliza
+> compatibilidade com o novo padrão brasileiro de TV (TV 3.0 / DTV+) e vai
+> priorizar o codec de vídeo mais recente do setor (VVC) assim que esse
+> suporte for lançado. Isso significa que essa tela já está tecnicamente
+> preparada para acompanhar essa evolução sem precisar trocar o hardware
+> — atualizações de software, quando saírem, chegam automaticamente, sem
+> custo extra de instalação. (Quem decodifica a transmissão de TV 3.0 em
+> si é o conversor externo, não o player DOOHPLAY.)
 >
 > Hoje o selo "TV 3.0 Ready" indica compatibilidade de player e, quando
 > aplicável, a presença de um receptor ou conversor externo conectado à
@@ -63,8 +70,13 @@ transmitiu a Copa do Mundo 2026 em TV 3.0, hoje limitada a Rio de
 Janeiro, São Paulo e Brasília.
 
 **O que exatamente o selo confirma?**
-Compatibilidade técnica do player + declaração do instalador sobre um
-receptor externo conectado. Não é leitura automática de hardware.
+Duas coisas, nenhuma delas é decodificar o sinal de TV 3.0: (1) que o
+instalador confirmou, no cadastro da tela, que existe um receptor ou
+conversor DTV+ externo conectado a ela, e (2) que o player já suporta
+mostrar esse selo e, quando o suporte a VVC estiver ativo, priorizar essa
+variante nos próprios conteúdos exibidos. Quem decodifica a transmissão
+de TV 3.0 é o conversor externo — hardware de terceiro, não o DOOHPLAY.
+Não é leitura automática de hardware.
 
 **Preciso comprar algum equipamento?**
 Só se quiser receber transmissão de TV 3.0 de verdade onde ela já
@@ -113,3 +125,20 @@ corrigiu 3 pontos nesta versão:
 3. A resposta de FAQ sobre preço dizia "Não" de forma categórica,
    contradizendo a pendência acima sobre pricing ainda não decidido —
    suavizado pra não virar promessa quebrada se o preço mudar.
+
+## Revisão de conteúdo à luz do CDC art. 37 (16/08/2026, 2ª passada)
+
+Revisão de conteúdo (não substitui revisão jurídica formal — não sou
+advogado) usando como referência o art. 37 do CDC, que proíbe publicidade
+enganosa inclusive por omissão de dado essencial. Encontrou 2 pontos
+ainda não cobertos pela correção anterior, ambos já corrigidos nesta
+versão:
+1. "Player compatível" / "player pronto tecnicamente" podia ser lido como
+   "o player decodifica o sinal de TV 3.0", o que não é real — quem
+   decodifica é o conversor externo (hardware de terceiro). Adicionado um
+   item explícito em "O que isso NÃO é" e reescrita a resposta do FAQ
+   "O que exatamente o selo confirma?" pra deixar essa distinção clara.
+2. "Sem necessidade de trocar o player ou o software" podia ser lido como
+   "nenhuma atualização nunca mais" — impreciso, já que o suporte a VVC,
+   quando existir, ainda vai exigir uma atualização de software (só não
+   troca de hardware). Reescrito no texto de proposta comercial.
