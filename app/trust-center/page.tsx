@@ -90,14 +90,11 @@ export default async function TrustCenterPage() {
   const CIRC   = 2 * Math.PI * RADIUS
   const CERTS = [
     { name: "ICP Brasil A3",           org: "AC Serpro",   expiry: "2026-12-31",   status: "Válido"   },
-    { name: "Ethereum Mainnet Anchor", org: "DOOHPLAY",    expiry: "Contínuo",     status: "Válido"   },
+    { name: "Blockchain Polygon Anchor", org: "DOOHPLAY",  expiry: "Contínuo",     status: "Válido"   },
     { name: "LGPD Adequação",          org: "DPO Interno", expiry: "2026-06-30",   status: "Válido"   },
-    { name: "SOC 2 Type II",           org: "KPMG",        expiry: "Em auditoria", status: "Pendente" },
-  ]
-  const REPORTS = [
-    { name: "Relatório Maio 2026",  date: "01/06/2026", size: "2.4 MB" },
-    { name: "Relatório Abril 2026", date: "01/05/2026", size: "2.1 MB" },
-    { name: "Relatório Q1 2026",    date: "01/04/2026", size: "6.8 MB" },
+    // SOC 2 Type II / KPMG removido em 16/08/2026: alegação de auditoria em
+    // andamento não confirmada pelo fundador (mesma classe de risco do
+    // incidente ISO 27001 removido em 10-12/07/2026). Só volta se confirmado.
   ]
   const trustColor = trustScore >= 90 ? GREEN : trustScore >= 70 ? AMBER : RED
   const riskColor  = riskScore  <= 10 ? GREEN : riskScore  <= 30 ? AMBER : RED
@@ -154,7 +151,7 @@ export default async function TrustCenterPage() {
         {/* HEADER */}
         <div style={{ marginBottom: "1.5rem" }}>
           <h1 style={{ fontSize: 26, fontWeight: 800, letterSpacing: "-0.03em", margin: "0 0 4px" }}>Trust Center</h1>
-          <p style={{ fontSize: 13, color: TEXT2, margin: 0 }}>Proof-of-Play Auditável · ICP Brasil · Ethereum Mainnet</p>
+          <p style={{ fontSize: 13, color: TEXT2, margin: 0 }}>Proof-of-Play Auditável · ICP Brasil · Blockchain Polygon</p>
         </div>
 
         {/* TOP BANNER */}
@@ -165,7 +162,7 @@ export default async function TrustCenterPage() {
             </div>
             <div>
               <div style={{ fontSize: 15, fontWeight: 700 }}>Trust Center — Proof-of-Play Auditável</div>
-              <div style={{ fontSize: 12, color: TEXT2 }}>Verificação criptográfica em tempo real · ICP Brasil · Blockchain Ethereum</div>
+              <div style={{ fontSize: 12, color: TEXT2 }}>Verificação criptográfica em tempo real · ICP Brasil · Blockchain Polygon</div>
             </div>
           </div>
           <div className="tc-banner-grid" style={{ display: "grid", gridTemplateColumns: "repeat(6,1fr)", gap: 12 }}>
@@ -308,20 +305,19 @@ export default async function TrustCenterPage() {
         {/* AUDIT REPORTS */}
         <div style={{ background: SURF, border: `1px solid ${BORDER}`, borderRadius: 16, overflow: "hidden", marginBottom: "1.5rem" }}>
           <div style={{ padding: "1rem 1.5rem", borderBottom: `1px solid ${BORDER}`, fontSize: 14, fontWeight: 700 }}>Audit Reports</div>
-          {REPORTS.map((r, i) => (
-            <div key={r.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 1.5rem", borderBottom: i < REPORTS.length - 1 ? `1px solid rgba(255,255,255,0.04)` : "none" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <div style={{ width: 36, height: 36, background: "rgba(59,130,246,0.1)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={BLUE} strokeWidth="2" strokeLinecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                </div>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: TEXT }}>{r.name}</div>
-                  <div style={{ fontSize: 11, color: MUTED }}>{r.date} · {r.size}</div>
-                </div>
-              </div>
-              <button style={{ background: "none", border: `1px solid ${BORDER}`, color: TEXT2, borderRadius: 8, padding: "6px 14px", fontSize: 12, cursor: "pointer", flexShrink: 0 }}>↓ Download</button>
+          <div style={{ padding: "1.25rem 1.5rem", display: "flex", flexDirection: "column", gap: 10 }}>
+            <div style={{ fontSize: 12, color: TEXT2, lineHeight: 1.6 }}>
+              Cada exibição gera um certificado individual auditável. Verifique qualquer hash publicamente ou exporte o certificado de uma campanha ou tela específica.
             </div>
-          ))}
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              <Link href="/verify" style={{ display: "flex", alignItems: "center", gap: 6, background: BLUE, color: "#fff", borderRadius: 8, padding: "8px 16px", fontSize: 12, fontWeight: 600, textDecoration: "none" }}>
+                👁 Verificar um hash
+              </Link>
+              <Link href="/api/certificate?code=ZIMERM" style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: `1px solid ${BORDER}`, color: TEXT2, borderRadius: 8, padding: "8px 16px", fontSize: 12, fontWeight: 500, textDecoration: "none" }}>
+                ↓ Exportar certificado de auditoria
+              </Link>
+            </div>
+          </div>
         </div>
 
         {/* COMPLIANCE FOOTER */}
