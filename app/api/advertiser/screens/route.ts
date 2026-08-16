@@ -9,8 +9,17 @@ export const dynamic = "force-dynamic"
 export async function GET() {
   const pool = getPool()
   try {
+    // UPPER(code) — studio_clients.code não é garantidamente maiúsculo no
+    // banco (mesmo motivo pelo qual outras rotas comparam com
+    // UPPER(code) = UPPER($1), ver app/dashboard/local/[code]/page.tsx e
+    // app/player/page.tsx). feature_flags.client_code é sempre gravado em
+    // maiúsculo (app/api/admin/feature-flags/route.ts faz .toUpperCase()),
+    // então sem esse UPPER() aqui o dtvReadyCodes.has(s.id) abaixo nunca
+    // batia — bug encontrado no smoke test de 16/08/2026 (flag ativada no
+    // admin pra BARBE332, mas /api/advertiser/screens continuava
+    // retornando dtv_ready: false).
     const { rows } = await pool.query(`
-      SELECT code AS id, name, city, business_type, screen_size, price_multiplier, screen_orientation
+      SELECT UPPER(code) AS id, name, city, business_type, screen_size, price_multiplier, screen_orientation
       FROM studio_clients
       WHERE active = true
       ORDER BY city ASC NULLS LAST, name ASC
