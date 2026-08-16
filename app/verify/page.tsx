@@ -222,6 +222,21 @@ export default function VerifyPage() {
 
   return (
     <main className="min-h-screen bg-slate-50">
+      <nav className="sticky top-0 z-10 border-b border-slate-200 bg-white/95 backdrop-blur">
+        <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
+          <Link href="/" className="flex items-center gap-2">
+            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-blue-500 to-indigo-600">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </span>
+            <span className="text-sm font-extrabold text-slate-900">
+              DOOH<span className="text-blue-600">PLAY</span>
+            </span>
+          </Link>
+          <Link href="/trust-center" className="text-xs font-medium text-slate-500 hover:text-slate-800">
+            Trust Center
+          </Link>
+        </div>
+      </nav>
       <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="grid gap-6 lg:grid-cols-[1.4fr_0.9fr]">
           <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
@@ -299,7 +314,7 @@ export default function VerifyPage() {
                   <button
                     type="submit"
                     disabled={!hasValue || !hashIsValid}
-                    className="rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="rounded-2xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     Verificar prova
                   </button>
