@@ -24,13 +24,16 @@ const BENEFITS = [
 
 // ─── Colors ───────────────────────────────────────────────────────────────────
 
+// Paleta alinhada à marca DOOHPLAY usada nas outras páginas (landing,
+// planos, trust-center, enterprise) — mesmo azul/verde, só que sobre
+// fundo claro nesta tela de ativação.
 const C = {
   bg:      "#F8FAFC",
   white:   "#FFFFFF",
-  blue:    "#2563EB",
+  blue:    "#3B82F6",
   blueLt:  "#EFF6FF",
   blueBd:  "#BFDBFE",
-  green:   "#16A34A",
+  green:   "#10B981",
   greenLt: "#DCFCE7",
   greenBd: "#86EFAC",
   gray50:  "#F9FAFB",
@@ -40,7 +43,7 @@ const C = {
   gray500: "#6B7280",
   gray700: "#374151",
   gray900: "#111827",
-  spinner: "#2563EB",
+  spinner: "#3B82F6",
 }
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -421,7 +424,7 @@ export default function InstallContent() {
 
           {/* Trust line */}
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "center", marginTop: 14 }}>
-            {["ICP-Brasil", "Blockchain", "LGPD", "Trust Score 97+"].map(tag => (
+            {["ICP-Brasil", "Blockchain", "LGPD", "Trust Score auditável"].map(tag => (
               <span key={tag} style={{ fontSize: 10, fontWeight: 500, padding: "3px 9px", borderRadius: 20, background: C.white, border: `1px solid ${C.gray200}`, color: C.gray500 }}>
                 {tag}
               </span>
