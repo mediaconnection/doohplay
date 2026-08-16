@@ -95,7 +95,7 @@ const PERSONAS = [
 
 const TRUST_BADGES = [
   { label: "ICP Brasil A3",      color: "#10B981" },
-  { label: "Ethereum Mainnet",   color: "#3B82F6" },
+  { label: "Blockchain Polygon", color: "#3B82F6" },
   { label: "LGPD Compliance",    color: "#F59E0B" },
   { label: "97.3 Trust Score",   color: "#10B981" },
 ]
@@ -719,7 +719,7 @@ export default function LandingPage() {
               🔗 ProofChain Explorer
             </div>
             <h2 style={{ fontSize: 36, fontWeight: 800, letterSpacing: "-0.03em", margin: "0 0 12px" }}>Cada prova verificável por qualquer pessoa.</h2>
-            <p style={{ fontSize: 16, color: "#64748B" }}>Blockchain público · Ethereum Mainnet · ICP Brasil</p>
+            <p style={{ fontSize: 16, color: "#64748B" }}>Blockchain público · Polygon · ICP Brasil</p>
           </div>
           <div style={{ maxWidth: 800, margin: "0 auto 2rem", display: "flex", gap: 10 }}>
             <div style={{ flex: 1, background: "#0F1629", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, padding: "12px 16px", fontSize: 13, color: "#475569" }}>
@@ -817,7 +817,7 @@ export default function LandingPage() {
             {[
               { title: "PLATAFORMA",    links: ["Instalar Tela", "Planos", "Enterprise", "AI Revenue"] },
               { title: "SEGURANÇA",     links: ["Trust Center", "ProofChain Explorer", "Status da Rede", "Relatórios"] },
-              { title: "CERTIFICAÇÕES", links: ["ICP Brasil A3", "Blockchain Ethereum", "LGPD Compliance"] },
+              { title: "CERTIFICAÇÕES", links: ["ICP Brasil A3", "Blockchain Polygon", "LGPD Compliance"] },
             ].map(col => (
               <div key={col.title}>
                 <div style={{ fontSize: 11, fontWeight: 700, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 12 }}>{col.title}</div>
