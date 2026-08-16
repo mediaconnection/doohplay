@@ -256,14 +256,14 @@ Qualquer dúvida, é só me chamar aqui no WhatsApp. Bem-vindo à rede! 🚀</di
   </div>
 
   <div class="slide">
-    <div class="slide-tag">Slide 3 — Números reais</div>
+    <div class="slide-tag">Slide 3 — Estimativa</div>
     <div class="slide-headline">O que você pode ganhar</div>
     <div class="stat-row">
-      <div class="stat"><div class="stat-num">1.2K</div><div class="stat-label">exibições/dia</div></div>
-      <div class="stat"><div class="stat-num">R$350</div><div class="stat-label">receita/mês</div></div>
+      <div class="stat"><div class="stat-num">1.2K</div><div class="stat-label">exibições/dia (exemplo)</div></div>
+      <div class="stat"><div class="stat-num">R$350</div><div class="stat-label">receita/mês (exemplo)</div></div>
       <div class="stat"><div class="stat-num">15min</div><div class="stat-label">instalação</div></div>
     </div>
-    <div class="slide-body" style="margin-top:14px">Estabelecimento com movimento de segunda a sábado, TV ligada durante o horário comercial.</div>
+    <div class="slide-body" style="margin-top:14px">Exemplo ilustrativo pra um estabelecimento com movimento de segunda a sábado e TV ligada no horário comercial — o valor real varia por local e demanda de anunciantes.</div>
   </div>
 
   <div class="slide">
