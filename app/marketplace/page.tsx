@@ -57,17 +57,22 @@ function segmentIcon(seg: string): string {
   return map[seg] ?? "📺"
 }
 
-function cpmEstimate(plays: number): string {
-  // CPM entre R$8 e R$20 baseado no volume
-  if (plays > 500) return "R$ 8,00"
-  if (plays > 200) return "R$ 12,00"
-  if (plays > 50)  return "R$ 15,00"
+// CPM ilustrativo por faixa de volume - nao e preco fechado, so uma
+// referencia pra conversa comercial. Rotulado como estimativa na UI.
+function cpmEstimate(plays30d: number): string {
+  if (plays30d > 500) return "R$ 8,00"
+  if (plays30d > 200) return "R$ 12,00"
+  if (plays30d > 50)  return "R$ 15,00"
   return "R$ 18,00"
 }
 
-function audienceEstimate(plays: number): string {
-  const daily = Math.max(plays, 50)
-  return `${(daily * 30).toLocaleString("pt-BR")} / mês`
+// Antes multiplicava o total historico de exibicoes (contagem acumulada
+// desde sempre) por 30, como se fosse media diaria - inflava muito o
+// numero de telas com historico longo. Agora usa a contagem real dos
+// ultimos 30 dias (plays_30d, vindo direto do banco), sem extrapolacao.
+function audienceEstimate(plays30d: number): string | null {
+  if (plays30d <= 0) return null
+  return `${plays30d.toLocaleString("pt-BR")} / mês`
 }
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
@@ -87,6 +92,7 @@ async function getScreens() {
         COALESCE(sc.business_type, NULL) AS business_type,
         COALESCE(sc.city,          NULL) AS client_city,
         COUNT(de.id)::int               AS total_plays,
+        COUNT(de.id) FILTER (WHERE de.played_at >= NOW() - INTERVAL '30 days')::int AS plays_30d,
         MAX(p.last_ping)::text          AS last_ping
       FROM players p
       LEFT JOIN studio_clients sc ON sc.player_id = p.id
@@ -182,7 +188,7 @@ export default async function MarketplacePage() {
             {[
               { value: String(summary.total),   label: "Telas ativas",      color: BLUE   },
               { value: `${cities.length}+`,     label: "Cidades",           color: GREEN  },
-              { value: "99.98%",                label: "Trust Score",       color: GREEN  },
+              { value: "Auditável",             label: "Trust Score",       color: GREEN  },
               { value: "ICP A3",                label: "Certificação",      color: PURPLE },
             ].map(s => (
               <div key={s.label} style={{ textAlign: "center" }}>

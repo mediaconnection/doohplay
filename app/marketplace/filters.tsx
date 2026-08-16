@@ -21,16 +21,21 @@ function segmentIcon(seg: string): string {
   return map[seg] ?? "📺"
 }
 
-function cpmEstimate(plays: number): string {
-  if (plays > 500) return "R$ 8,00"
-  if (plays > 200) return "R$ 12,00"
-  if (plays > 50)  return "R$ 15,00"
+// CPM ilustrativo por faixa de volume - referencia pra conversa
+// comercial, nao e preco fechado (por isso o rotulo "CPM (estimado)").
+function cpmEstimate(plays30d: number): string {
+  if (plays30d > 500) return "R$ 8,00"
+  if (plays30d > 200) return "R$ 12,00"
+  if (plays30d > 50)  return "R$ 15,00"
   return "R$ 18,00"
 }
 
-function audienceEstimate(plays: number): string {
-  const daily = Math.max(plays, 50)
-  return `${(daily * 30).toLocaleString("pt-BR")} / mês`
+// Baseado na contagem real de exibicoes dos ultimos 30 dias (plays_30d),
+// sem extrapolar total historico. Telas sem exibicao recente retornam
+// null e o card mostra "Sem dado" em vez de um numero inflado.
+function audienceEstimate(plays30d: number): string | null {
+  if (plays30d <= 0) return null
+  return `${plays30d.toLocaleString("pt-BR")} / mês`
 }
 
 // ─── Modal ────────────────────────────────────────────────────────────────────
@@ -273,9 +278,9 @@ export default function MarketplaceFilters({ screens, cities, segments }: {
                   </div>
                   <div className="mkt-card-metrics" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginBottom: 14 }}>
                     {[
-                      { label: "Audiência", value: audienceEstimate(s.total_plays) },
-                      { label: "CPM",       value: cpmEstimate(s.total_plays) },
-                      { label: "Segmento",  value: s.segment },
+                      { label: "Audiência (est.)", value: audienceEstimate(s.plays_30d) ?? "Sem dado" },
+                      { label: "CPM (estimado)",   value: cpmEstimate(s.plays_30d) },
+                      { label: "Segmento",         value: s.segment },
                     ].map(m => (
                       <div key={m.label} style={{ background: "rgba(255,255,255,0.03)", borderRadius: 8, padding: "8px 6px", textAlign: "center" }}>
                         <div style={{ fontSize: 11, fontWeight: 600, color: TEXT, marginBottom: 2 }}>{m.value}</div>
