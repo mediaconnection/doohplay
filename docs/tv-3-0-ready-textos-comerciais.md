@@ -9,8 +9,9 @@
 
 ## O que isso É
 
-- O player DOOHPLAY é compatível com o padrão TV 3.0 (DTV+) e prioriza o
-  codec VVC quando a mídia estiver disponível nesse formato.
+- O player DOOHPLAY é compatível com o padrão TV 3.0 (DTV+). Suporte ao
+  codec VVC está em preparação — a seleção automática de variante de
+  mídia por codec ainda não está ativa (ver "O que isso NÃO é").
 - Um selo visual "TV 3.0 Ready" no dashboard do cliente e no portal do
   anunciante, ativado quando o instalador confirma que existe um
   receptor/conversor DTV+ externo conectado àquela tela.
@@ -19,10 +20,16 @@
 
 ## O que isso NÃO é
 
+- **Não é** seleção automática de vídeo em VVC. O pipeline de mídia
+  (Studio, upload) ainda não gera nem armazena variantes por codec — o
+  campo que sinaliza preferência por VVC existe no código como
+  infraestrutura, mas nada consome esse sinal ainda.
 - **Não é** recepção de canal de TV aberta pela tela. Nenhuma TV vendida
   no Brasil tem chip DTV+ nativo hoje; existem apenas conversores
-  externos. SBT e Record têm só estações-piloto em teste (sem confirmação
-  de transmissão comercial própria).
+  externos. **Atualização (16/08/2026):** a Globo já fez a primeira
+  transmissão comercial de TV 3.0 do país durante a Copa do Mundo 2026,
+  hoje restrita a Rio de Janeiro, São Paulo e Brasília e dependente de
+  receptor compatível; SBT e Record seguem com estações-piloto em teste.
 - **Não é** detecção automática de hardware. Não existe API de navegador
   para consultar o que está conectado na cadeia HDMI de uma TV — o selo
   reflete uma declaração do instalador, não uma leitura de sensor.
@@ -33,43 +40,48 @@
 ## Texto para proposta comercial (copiar e adaptar)
 
 > A tela [NOME DO CLIENTE] já roda no player DOOHPLAY, que é compatível
-> com o novo padrão brasileiro de TV (TV 3.0 / DTV+), incluindo suporte
-> priorizado ao codec de vídeo mais recente do setor (VVC). Isso significa
+> com o novo padrão brasileiro de TV (TV 3.0 / DTV+), com suporte ao
+> codec de vídeo mais recente do setor (VVC) em preparação. Isso significa
 > que, à medida que o padrão avançar comercialmente no Brasil, essa tela
 > já está tecnicamente preparada para acompanhar essa evolução — sem
 > necessidade de trocar o player ou o software.
 >
 > Hoje o selo "TV 3.0 Ready" indica compatibilidade de player e, quando
 > aplicável, a presença de um receptor ou conversor externo conectado à
-> tela. A recepção de transmissão aberta de TV 3.0 depende de emissoras
-> brasileiras transmitindo comercialmente na região — algo que ainda está
-> em fase de teste no país.
+> tela. A TV 3.0 já teve sua primeira transmissão comercial no Brasil
+> (Globo, Copa do Mundo 2026), hoje limitada a Rio de Janeiro, São Paulo
+> e Brasília e a quem tem receptor compatível — a expansão pra mais
+> praças e emissoras ainda está em andamento.
 
 ## FAQ (mesmo conteúdo da página pública `/tv-3-0-ready`)
 
 **Minha TV já recebe canais de TV 3.0 pelo ar com isso?**
-Não. Significa que o player já é compatível e prioriza VVC — a recepção
-real depende de transmissão comercial das emissoras (hoje só pilotos) e
-de um conversor externo conectado.
+Não. Significa que o player já é compatível, com suporte a VVC em
+preparação — a recepção real depende de transmissão comercial das
+emissoras na sua região e de um conversor externo conectado. A Globo já
+transmitiu a Copa do Mundo 2026 em TV 3.0, hoje limitada a Rio de
+Janeiro, São Paulo e Brasília.
 
 **O que exatamente o selo confirma?**
 Compatibilidade técnica do player + declaração do instalador sobre um
 receptor externo conectado. Não é leitura automática de hardware.
 
 **Preciso comprar algum equipamento?**
-Só se quiser receber transmissão de TV 3.0 de verdade quando/onde ela
+Só se quiser receber transmissão de TV 3.0 de verdade onde ela já
 existir comercialmente — um conversor externo compatível. O DOOHPLAY não
 vende nem exige esse equipamento.
 
 **Isso muda o preço da assinatura?**
-Não, na Fase Ready — é preparação técnica, sem cobrança adicional
-associada até haver entrega de valor real e mensurável.
+Não há cobrança adicional confirmada nesta fase. O preço específico
+dessa fase ainda não foi definido — se isso mudar, comunicamos antes de
+qualquer cobrança.
 
 **Quando a recepção de transmissão aberta vai funcionar de verdade?**
-Depende de fatores fora do nosso controle (emissoras, parceria de
-espectro/middleware). Acompanhamos ativamente e atualizamos a
-comunicação assim que houver mudança real — nunca antecipamos isso como
-já disponível.
+Já começou de forma limitada — a Globo transmitiu a Copa do Mundo 2026
+em TV 3.0, restrita a Rio de Janeiro, São Paulo e Brasília e a quem tem
+receptor compatível. Expansão pra mais praças e emissoras (SBT, Record)
+depende de fatores fora do nosso controle; acompanhamos ativamente e
+atualizamos essa comunicação conforme evolui.
 
 ## Pendências / pontos que precisam de validação humana
 
@@ -86,3 +98,18 @@ já disponível.
       com cliente, dado o histórico do projeto com a certificação ISO
       27001 removida por reivindicação não sustentável (10-12/07/2026) —
       mesma classe de risco que este documento tenta evitar.
+
+## Correção (16/08/2026)
+
+Revisão de conteúdo (não substitui revisão jurídica formal) encontrou e
+corrigiu 3 pontos nesta versão:
+1. O texto original dizia que o player "prioriza o codec VVC" como se
+   fosse uma feature ativa — corrigido pra "suporte em preparação", já
+   que o pipeline de mídia ainda não gera/seleciona variante por codec.
+2. O texto original dizia que SBT/Record tinham só estações-piloto sem
+   nenhuma transmissão comercial — desatualizado: a Globo já fez a
+   primeira transmissão comercial de TV 3.0 do país na Copa do Mundo
+   2026 (limitada a RJ/SP/Brasília). Corrigido em todas as ocorrências.
+3. A resposta de FAQ sobre preço dizia "Não" de forma categórica,
+   contradizendo a pendência acima sobre pricing ainda não decidido —
+   suavizado pra não virar promessa quebrada se o preço mudar.

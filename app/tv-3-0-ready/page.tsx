@@ -18,7 +18,7 @@ const PURPLE = "#8B5CF6"
 const FAQ = [
   {
     q: "Minha TV já recebe canais de TV 3.0 pelo ar com isso?",
-    a: "Não. \"TV 3.0 Ready\" significa que o player DOOHPLAY já é compatível com o novo padrão e prioriza o codec VVC quando disponível — a recepção de transmissão aberta de TV 3.0 depende de emissoras transmitindo comercialmente na sua região (hoje SBT e Record têm só estações-piloto em teste) e de um receptor/conversor externo conectado à tela.",
+    a: "Não. \"TV 3.0 Ready\" significa que o player DOOHPLAY já é compatível com o novo padrão, com suporte ao codec VVC em preparação — a recepção de transmissão aberta de TV 3.0 depende de emissoras transmitindo comercialmente na sua região e de um receptor/conversor externo conectado à tela. A Globo já transmitiu a Copa do Mundo 2026 em TV 3.0, hoje limitada a Rio de Janeiro, São Paulo e Brasília; SBT e Record seguem com estações-piloto em teste.",
   },
   {
     q: "O que exatamente o selo confirma?",
@@ -26,15 +26,15 @@ const FAQ = [
   },
   {
     q: "Preciso comprar algum equipamento?",
-    a: "Se você quiser receber transmissão de TV 3.0 de verdade (quando/onde ela existir comercialmente), sim — um conversor externo compatível. O DOOHPLAY em si não vende nem exige esse equipamento; o selo só sinaliza compatibilidade do player.",
+    a: "Se você quiser receber transmissão de TV 3.0 de verdade onde ela já existir comercialmente, sim — um conversor externo compatível. O DOOHPLAY em si não vende nem exige esse equipamento; o selo só sinaliza compatibilidade do player.",
   },
   {
     q: "Isso muda o preço da minha assinatura?",
-    a: "Não. A Fase Ready de TV 3.0 é uma preparação técnica, sem cobrança adicional associada até que exista entrega de valor real e mensurável ao anunciante ou ao dono da tela.",
+    a: "Não há cobrança adicional confirmada nesta fase. O preço específico da Fase Ready ainda não foi definido — se isso mudar, avisamos antes de qualquer cobrança.",
   },
   {
     q: "Quando a recepção de transmissão aberta vai funcionar de verdade?",
-    a: "Depende de fatores fora do nosso controle: emissoras confirmarem transmissão comercial (hoje só há pilotos) e disponibilidade de parceria de espectro/middleware. Acompanhamos isso ativamente e atualizamos essa página assim que houver mudança real.",
+    a: "Já começou de forma limitada: a Globo transmitiu a Copa do Mundo 2026 em TV 3.0, restrita a Rio de Janeiro, São Paulo e Brasília e a quem tem receptor compatível. Expansão pra mais praças e emissoras (SBT, Record) depende de fatores fora do nosso controle. Acompanhamos isso ativamente e atualizamos essa página conforme evolui.",
   },
 ]
 
@@ -63,10 +63,10 @@ export default function Tv3ReadyPage() {
             Preparado para o novo padrão<br /><span style={{ color: PURPLE }}>de TV brasileira.</span>
           </h1>
           <p style={{ fontSize: 15, color: TEXT2, maxWidth: 580, margin: "0 auto", lineHeight: 1.6 }}>
-            Nosso player já é compatível com o TV 3.0 (DTV+) e prioriza o codec VVC.
-            Isso é preparação técnica de player — não é promessa de recepção de
-            transmissão aberta hoje. Veja abaixo exatamente o que já existe e o
-            que ainda depende do setor de radiodifusão.
+            Nosso player já é compatível com o TV 3.0 (DTV+), com suporte ao codec
+            VVC em preparação. Isso é preparação técnica de player — não é promessa
+            de recepção de transmissão aberta hoje. Veja abaixo exatamente o que já
+            existe e o que ainda depende do setor de radiodifusão.
           </p>
         </div>
 
@@ -77,7 +77,7 @@ export default function Tv3ReadyPage() {
             </div>
             <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 8 }}>
               {[
-                "Player compatível com o padrão TV 3.0, priorizando VVC",
+                "Player compatível com o padrão TV 3.0, com suporte a VVC em preparação",
                 "Selo declarativo pro dono confirmar receptor/conversor externo",
                 "Visibilidade pro anunciante de quais telas já estão preparadas",
               ].map(item => (
@@ -93,7 +93,7 @@ export default function Tv3ReadyPage() {
             </div>
             <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 8 }}>
               {[
-                "Transmissão comercial de TV 3.0 pelas emissoras (hoje: pilotos)",
+                "Transmissão comercial em mais praças e emissoras (hoje: Globo transmitiu a Copa 2026 em RJ/SP/Brasília; SBT e Record seguem em piloto)",
                 "Disponibilidade de receptores/conversores em maior escala",
                 "Datacasting e parceria de espectro para distribuição própria",
               ].map(item => (
