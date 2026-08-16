@@ -206,9 +206,24 @@ export async function GET(
 
 
 
-    const [unified, network, realAds] = await Promise.all([
-      unifiedQuery, networkQuery, realAdsQuery,
+    // Fase 45 (16/08/2026): campo dtv_ready na resposta da playlist —
+    // prometido em docs/api-contract.md e docs/dtv-ready-mvp-plano.md
+    // (seção 5, contrato) pra o player (app/player/page.tsx) saber se
+    // deve considerar VVC como prioridade de codec e mostrar o selo sem
+    // precisar de uma segunda chamada de rede. Nunca tinha sido
+    // implementado de fato — só documentado (achado no smoke test de
+    // 16/08/2026). Try/catch próprio, mesmo padrão das outras leituras de
+    // feature_flags no projeto: se a migração Fase 45 ainda não rodou
+    // nesse ambiente, cai em false sem quebrar a playlist.
+    const dtvFlagQuery = pool.query(
+      `SELECT enabled FROM feature_flags WHERE client_code = $1 AND flag_key = 'dtv_ready' LIMIT 1`,
+      [upperCode]
+    ).catch(() => ({ rows: [] as any[] }))
+
+    const [unified, network, realAds, dtvFlag] = await Promise.all([
+      unifiedQuery, networkQuery, realAdsQuery, dtvFlagQuery,
     ])
+    const dtvReady = dtvFlag.rows[0]?.enabled === true
 
     const items = [
       ...unified.rows,
@@ -224,6 +239,8 @@ export async function GET(
       // Fase 20 (14/07/2026): opt-in de áudio, por cliente. Default false
       // (mudo) preserva o comportamento de sempre pra quem não configurou.
       audio_enabled: client.rows[0]?.audio_enabled ?? false,
+      // Fase 45 (16/08/2026) — ver comentário acima, na query dtvFlagQuery.
+      dtv_ready: dtvReady,
       items,
       // "slides" e "playlist" são aliases do mesmo array — mantidos para
       // compatibilidade com clientes (player web antigo, app Android nativo)
