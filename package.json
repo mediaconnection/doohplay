@@ -9,7 +9,8 @@
     "start": "npx puppeteer browsers install chrome --quiet && next start",
     "worker": "tsx --env-file=.env.local worker.ts",
     "worker:prod": "node --env-file=.env.local dist/worker.js",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "tsx --test app/player/dtv/*.test.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.600.0",

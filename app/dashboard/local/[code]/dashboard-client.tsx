@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect } from "react"
 import type { ClientData, PlayerData, StatsData, PlaylistItem, Payment } from "./page"
+import DtvReadyBadge from "@/components/ui/DtvReadyBadge"
 
 const C = {
   bg:      "#F8FAFC",
@@ -451,7 +452,7 @@ function ModalConfirmDelete({ name, onConfirm, onCancel, loading }: { name: stri
   )
 }
 
-function TabDashboard({ client, player, stats, playlist, payments, onNav, onAddPromo, online, lastSeen, checking }: any) {
+function TabDashboard({ client, player, stats, playlist, payments, onNav, onAddPromo, online, lastSeen, checking, dtvReady }: any) {
   const revenue = stats.revenue_month || 0
   const vizToday = stats.plays_today
   const sinceText = lastSeen
@@ -495,7 +496,10 @@ function TabDashboard({ client, player, stats, playlist, payments, onNav, onAddP
             <div style={{ fontSize: 12, color: online ? C.green : C.red, opacity: 0.8 }}>Última sincronização: {sinceText}</div>
           </div>
         </div>
-        <StatusBadge online={online} checking={checking} />
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <DtvReadyBadge enabled={!!dtvReady} />
+          <StatusBadge online={online} checking={checking} />
+        </div>
       </div>
 
       <div className="db-kpis" style={{ display: "flex", gap: 12, marginBottom: 20, flexWrap: "wrap" }}>
@@ -2394,9 +2398,9 @@ function TabMeusClientes({ code }: { code: string }) {
   )
 }
 
-interface Props { client: ClientData; player: PlayerData | null; stats: StatsData; playlist: PlaylistItem[]; payments: Payment[] }
+interface Props { client: ClientData; player: PlayerData | null; stats: StatsData; playlist: PlaylistItem[]; payments: Payment[]; dtvReady?: boolean }
 
-export default function DashboardClient({ client, player, stats, playlist, payments }: Props) {
+export default function DashboardClient({ client, player, stats, playlist, payments, dtvReady = false }: Props) {
   const [tab,       setTab]       = useState("dashboard")
   const [sideOpen,  setSideOpen]  = useState(true)
   const [drawerOpen,setDrawerOpen]= useState(false)
@@ -2417,7 +2421,7 @@ export default function DashboardClient({ client, player, stats, playlist, payme
   const initials = client.name.split(" ").slice(0, 2).map(w => w[0]).join("").toUpperCase()
 
   const tabContent: Record<string, React.ReactNode> = {
-    dashboard:  <TabDashboard client={client} player={player} stats={stats} playlist={playlist} payments={payments} onNav={onNav} onAddPromo={onAddPromo} online={online} lastSeen={lastSeen} checking={checking} />,
+    dashboard:  <TabDashboard client={client} player={player} stats={stats} playlist={playlist} payments={payments} onNav={onNav} onAddPromo={onAddPromo} online={online} lastSeen={lastSeen} checking={checking} dtvReady={dtvReady} />,
     tv:         <TabTV client={client} player={player} playlist={playlist} online={online} checking={checking} />,
     conteudo:   <TabConteudo client={client} playlist={playlist} onAddPromo={onAddPromo} onRefresh={onRefresh} />,
     anuncios:   <TabAnuncios stats={stats} payments={payments} code={client.code} onAddPromo={onAddPromo} />,

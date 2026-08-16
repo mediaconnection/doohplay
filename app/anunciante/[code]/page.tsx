@@ -2,6 +2,7 @@
 
 import { Suspense } from "react";
 import { useState, useEffect, useRef, use } from "react";
+import DtvReadyBadge from "@/components/ui/DtvReadyBadge";
 
 // ─── Paleta dark premium ─────────────────────────────────────────────────────
 const C = {
@@ -79,7 +80,7 @@ function TabCampanhas({ code, campaigns, onRefresh }: { code: string; campaigns:
     name: "", startDate: "", endDate: "", budget: "", screens: [] as string[],
   });
 
-  const [screensList, setScreensList] = useState<{ id: string; city: string; name: string; business_type?: string; screen_size?: string; price_multiplier?: number; screen_orientation?: string }[]>([]);
+  const [screensList, setScreensList] = useState<{ id: string; city: string; name: string; business_type?: string; screen_size?: string; price_multiplier?: number; screen_orientation?: string; dtv_ready?: boolean }[]>([]);
 
   useEffect(() => {
     fetch("/api/advertiser/screens")
@@ -235,7 +236,11 @@ function TabCampanhas({ code, campaigns, onRefresh }: { code: string; campaigns:
                       {sel && <span style={{ color: "#fff", fontSize: 10, fontWeight: 700 }}>✓</span>}
                     </div>
                     <div>
-                      <div style={{ fontSize: 13, color: C.text, fontWeight: 500 }}>{sc.name}</div>
+                      <div style={{ fontSize: 13, color: C.text, fontWeight: 500, display: "flex", alignItems: "center", gap: 6 }}>
+                        {sc.name}
+                        {/* Fase 45 (16/08/2026): selo declarativo, ver components/ui/DtvReadyBadge.tsx */}
+                        {sc.dtv_ready && <DtvReadyBadge enabled variant="compact" />}
+                      </div>
                       <div style={{ fontSize: 11, color: C.textSub }}>
                         {sc.city}
                         {sc.business_type && ` · ${sc.business_type}`}

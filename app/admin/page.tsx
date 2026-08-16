@@ -2569,6 +2569,13 @@ function TabTemplates({ data }: { data: any }) {
   const [brandColor, setBrandColor] = useState("#3B82F6")
   const [savingBrand, setSavingBrand] = useState(false)
   const [brandMsg, setBrandMsg] = useState("")
+  // Fase 45 (16/08/2026): selo "TV 3.0 Ready" — flag declarada por
+  // cliente, ver docs/dtv-ready-mvp-plano.md. NÃO é detecção automática
+  // de hardware; é o instalador confirmando que há um receptor/conversor
+  // DTV+ conectado àquela tela.
+  const [dtvReady, setDtvReady] = useState(false)
+  const [savingDtv, setSavingDtv] = useState(false)
+  const [dtvMsg, setDtvMsg] = useState("")
 
   useEffect(() => {
     if (!clientCode) { setClientSettings(null); return }
@@ -2580,6 +2587,36 @@ function TabTemplates({ data }: { data: any }) {
       })
       .catch(() => setClientSettings(null))
   }, [clientCode])
+
+  useEffect(() => {
+    if (!clientCode) { setDtvReady(false); setDtvMsg(""); return }
+    fetch(`/api/admin/feature-flags?client_code=${encodeURIComponent(clientCode)}`)
+      .then(r => r.json())
+      .then(d => {
+        const flag = (d.items ?? []).find((i: any) => i.flag_key === "dtv_ready")
+        setDtvReady(!!flag?.enabled)
+      })
+      .catch(() => setDtvReady(false))
+  }, [clientCode])
+
+  const saveDtvReady = async (next: boolean) => {
+    if (!clientCode) return
+    setSavingDtv(true); setDtvMsg("")
+    try {
+      const res = await fetch("/api/admin/feature-flags", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ client_code: clientCode, flag_key: "dtv_ready", enabled: next }),
+      })
+      const d = await res.json()
+      if (!res.ok) throw new Error(d.error || "Erro ao salvar")
+      setDtvReady(next)
+      setDtvMsg(next ? "✅ Selo TV 3.0 Ready ativado" : "Selo desativado")
+    } catch (err: any) {
+      setDtvMsg("⚠️ " + (err.message || "Erro ao salvar"))
+    }
+    setSavingDtv(false)
+  }
 
   const saveBrandColor = async () => {
     if (!clientCode || !clientSettings) return
@@ -2670,6 +2707,30 @@ function TabTemplates({ data }: { data: any }) {
               </button>
             </div>
             {brandMsg && <div style={{ fontSize: 11, marginTop: 8 }}>{brandMsg}</div>}
+          </div>
+        )}
+
+        {clientCode && (
+          <div style={{ marginBottom: 20, padding: 14, background: BG, borderRadius: 8, border: "1px solid " + BORDER }}>
+            <label style={{ fontSize: 11, color: TEXT2, display: "block", marginBottom: 8 }}>
+              📡 Selo "TV 3.0 Ready" (Fase 45) — declaração de que há um receptor/conversor DTV+ conectado a essa tela, não detecção automática de hardware
+            </label>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <button
+                type="button"
+                onClick={() => saveDtvReady(!dtvReady)}
+                disabled={savingDtv}
+                style={{
+                  background: dtvReady ? BLUE : BG, color: dtvReady ? "#fff" : TEXT2,
+                  border: "1px solid " + (dtvReady ? BLUE : BORDER), borderRadius: 6,
+                  padding: "7px 14px", fontSize: 12, fontWeight: 600, cursor: "pointer",
+                  opacity: savingDtv ? 0.6 : 1,
+                }}
+              >
+                {savingDtv ? "Salvando..." : dtvReady ? "✅ Ativado" : "Ativar selo"}
+              </button>
+            </div>
+            {dtvMsg && <div style={{ fontSize: 11, marginTop: 8 }}>{dtvMsg}</div>}
           </div>
         )}
 

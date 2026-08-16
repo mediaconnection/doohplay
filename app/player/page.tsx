@@ -3,6 +3,7 @@
 export const dynamic = "force-dynamic"
 
 import { getPool } from "@/lib/db"
+import { detectDtvReceiver } from "./dtv/detectReceiver"
 
 interface PlayerMediaRow {
   name: string;
@@ -175,6 +176,28 @@ async function getPlayerData(code: string) {
       LIMIT 1
     `, [upperCode])
     const template = templateRes.rows[0] || null
+
+    // Fase 45 (16/08/2026) — flag "TV 3.0 Ready" (dtv_ready), ver
+    // docs/dtv-ready-mvp-plano.md e docs/api-contract.md. Consulta em
+    // try/catch PRÓPRIO, separado do try/catch geral desta função: se a
+    // migração sql/phase45_step1_feature_flags.sql ainda não rodou nesse
+    // ambiente (tabela feature_flags não existe), a tela não pode ficar
+    // em branco por causa de uma feature opcional — cai em "false" e
+    // segue o fluxo normal, igual a qualquer cliente sem a flag.
+    let dtvReadyFlag = false
+    try {
+      const dtvRes = await pool.query<{ enabled: boolean }>(
+        `SELECT enabled FROM feature_flags WHERE client_code = $1 AND flag_key = 'dtv_ready' LIMIT 1`,
+        [upperCode]
+      )
+      dtvReadyFlag = dtvRes.rows[0]?.enabled === true
+    } catch (dtvErr) {
+      console.error("[player/page getPlayerData] feature_flags indisponível (migração Fase 45 pendente?), dtv_ready cai em false:", dtvErr)
+    }
+    // Detecção declarativa (ver app/player/dtv/detectReceiver.ts) — não é
+    // leitura de hardware real; sem ponte nativa Android disponível hoje,
+    // isso sempre resolve a partir da flag configurada no admin.
+    const dtvStatus = detectDtvReceiver({ dtvReadyFlag })
 
     async function fetchWidgetsData(tpl: typeof template) {
       const lat = tpl?.location_lat ?? -23.5505
@@ -409,10 +432,15 @@ async function getPlayerData(code: string) {
       widgets,
       layoutZones,
       poll,
+      // Fase 45 (16/08/2026): "TV 3.0 Ready" — ver
+      // app/player/dtv/detectReceiver.ts e docs/dtv-ready-mvp-plano.md.
+      // dtvReady é sempre false por padrão; ausência da flag NUNCA muda
+      // comportamento existente do player.
+      dtvReady: dtvStatus.connected,
     }
   } catch (err) {
     console.error("[player/page getPlayerData] erro ao buscar dados, devolvendo tela vazia:", err)
-    return { name: "DOOHPLAY", business_type: "", primary_color: "#3B82F6", audio_enabled: false, medias: [] as PlayerMedia[], template: "fullscreen", transitionEffect: "fade", widgetLayoutMode: "fixed", widgetPosition: "lateral_right", widgets: null as any, layoutZones: null as any, poll: null as any }
+    return { name: "DOOHPLAY", business_type: "", primary_color: "#3B82F6", audio_enabled: false, medias: [] as PlayerMedia[], template: "fullscreen", transitionEffect: "fade", widgetLayoutMode: "fixed", widgetPosition: "lateral_right", widgets: null as any, layoutZones: null as any, poll: null as any, dtvReady: false }
   }
 }
 
@@ -1563,7 +1591,14 @@ export default async function PlayerPage({
             max-width: 48px;
           }
         `}</style>
-      <div id="player" className={data.template === "magazine" ? (data.widgetPosition === "bottom" ? "has-bottom-banner-widgets" : "has-lateral-widgets") : ""} dangerouslySetInnerHTML={{ __html: playerInnerHtml }} />
+      <div id="player" className={[
+        data.template === "magazine" ? (data.widgetPosition === "bottom" ? "has-bottom-banner-widgets" : "has-lateral-widgets") : "",
+        // Fase 45 (16/08/2026): hook só de marcação — nenhum CSS/JS reage
+        // a essa classe ainda neste MVP. Ver app/player/dtv/ e
+        // docs/dtv-ready-mvp-plano.md. Não afeta layout nem comportamento
+        // existente; dtvReady é sempre false por padrão.
+        data.dtvReady ? "dtv-ready" : "",
+      ].filter(Boolean).join(" ")} dangerouslySetInnerHTML={{ __html: playerInnerHtml }} />
 
         <script dangerouslySetInnerHTML={{ __html: `
           (function() {

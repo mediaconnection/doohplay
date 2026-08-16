@@ -115,6 +115,37 @@ Campo correto: `screen_code`, nao `code`.
 
 Esta inconsistencia com o heartbeat e conhecida e mantida por compatibilidade retroativa. Nao "corrigir" sem avaliar todos os consumidores existentes.
 
+## `GET/POST /api/admin/feature-flags` (NOVO, Fase 45, 16/08/2026)
+
+**Quem implementa:** backend web (`app/api/admin/feature-flags/route.ts`)
+
+**Quem consome:** admin, player web (le via campo `dtv_ready` na playlist, ver abaixo), app Android nativo (idem)
+
+Tabela generica `feature_flags` (`client_code` + `flag_key` unico) — nao criar coluna nova em `screen_templates` a cada feature flag futura. `flag_key` e uma allowlist controlada no backend, mesmo padrao ja usado em `widget_layout_mode`/`widget_position`. Primeira chave usada: `dtv_ready`.
+
+### Request (POST)
+
+```json
+{ "client_code": "BARBE332", "flag_key": "dtv_ready", "enabled": true }
+```
+
+### Response (200)
+
+```json
+{ "ok": true, "client_code": "BARBE332", "flag_key": "dtv_ready", "enabled": true }
+```
+
+### Campo novo em `GET /api/client/playlist/{code}` (aditivo)
+
+```json
+{
+  "...campos existentes inalterados...": "",
+  "dtv_ready": false
+}
+```
+
+`dtv_ready` e sempre `false` por padrao. Ausencia da flag NUNCA muda comportamento existente do player — mesmo padrao "zero mudanca pra quem nao configurou" usado no resto do contrato. Quando `true`, o player web prioriza codec VVC quando disponivel e mostra o selo comercial "TV 3.0 Ready"; e uma flag de compatibilidade/declaracao do instalador, nao deteccao automatica de hardware (nao existe API de browser para consultar dispositivos HDMI-CEC a jusante) nem promessa de recepcao de transmissao aberta de TV 3.0.
+
 ## Governanca
 
 1. Qualquer mudanca de contrato precisa ser refletida aqui antes de qualquer codigo.

@@ -225,6 +225,20 @@ export default async function DashboardPage({
     payments = payRes.rows
   } catch {}
 
+  // 6. Feature flag "TV 3.0 Ready" (Fase 45, 16/08/2026) — ver
+  // docs/dtv-ready-mvp-plano.md e docs/api-contract.md. Mesmo padrão
+  // try/catch das outras queries desta página: se a migração
+  // sql/phase45_step1_feature_flags.sql ainda não rodou nesse ambiente,
+  // cai em false e o dashboard segue exatamente como sempre.
+  let dtvReady = false
+  try {
+    const dtvRes = await pool.query(
+      `SELECT enabled FROM feature_flags WHERE client_code = $1 AND flag_key = 'dtv_ready' LIMIT 1`,
+      [upperCode]
+    )
+    dtvReady = dtvRes.rows[0]?.enabled === true
+  } catch {}
+
   return (
     <DashboardClient
       client={client}
@@ -232,6 +246,7 @@ export default async function DashboardPage({
       stats={stats}
       playlist={playlist}
       payments={payments}
+      dtvReady={dtvReady}
     />
   )
 }

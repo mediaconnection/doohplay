@@ -15,7 +15,22 @@ export async function GET() {
       WHERE active = true
       ORDER BY city ASC NULLS LAST, name ASC
     `)
-    return Response.json({ screens: rows })
+
+    // Fase 45 (16/08/2026): selo "TV 3.0 Ready" (dtv_ready), ver
+    // docs/dtv-ready-mvp-plano.md. Query separada e com try/catch próprio
+    // — se a migração sql/phase45_step1_feature_flags.sql ainda não rodou
+    // nesse ambiente, a lista de telas continua funcionando normalmente,
+    // só sem o selo.
+    let dtvReadyCodes = new Set<string>()
+    try {
+      const dtvRes = await pool.query(
+        `SELECT client_code FROM feature_flags WHERE flag_key = 'dtv_ready' AND enabled = true`
+      )
+      dtvReadyCodes = new Set(dtvRes.rows.map((r: any) => r.client_code))
+    } catch {}
+
+    const screens = rows.map((s: any) => ({ ...s, dtv_ready: dtvReadyCodes.has(s.id) }))
+    return Response.json({ screens })
   } catch (err) {
     console.error("[advertiser/screens GET]", err)
     return Response.json({ screens: [], error: String(err) }, { status: 500 })
