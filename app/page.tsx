@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Link from "next/link"
 
 const NAV_LINKS = [
@@ -13,15 +13,6 @@ const NAV_LINKS = [
 ]
 
 const TAGS = ["Digital Signage", "Retail Media", "Blockchain", "ICP Brasil", "ProofChain", "Trust Score"]
-
-const STATS = [
-  { value: "12.847", label: "Telas ativas",         color: "#3B82F6" },
-  { value: "84.2M",  label: "Impressões hoje",      color: "#10B981" },
-  { value: "R$8.4M", label: "Receita gerada",       color: "#F59E0B" },
-  { value: "96.8",   label: "Trust Score",          color: "#10B981" },
-  { value: "99.9%",  label: "SLA",                  color: "#3B82F6" },
-  { value: "4.8M",   label: "Provas auditadas",     color: "#8B5CF6" },
-]
 
 const SEGMENTS = [
   { icon: "🍞", label: "Padarias" },
@@ -97,7 +88,7 @@ const TRUST_BADGES = [
   { label: "ICP Brasil A3",      color: "#10B981" },
   { label: "Blockchain Polygon", color: "#3B82F6" },
   { label: "LGPD Compliance",    color: "#F59E0B" },
-  { label: "97.3 Trust Score",   color: "#10B981" },
+  { label: "Trust Score auditável", color: "#10B981" },
 ]
 
 // ─── Modal Solicitar Demo ─────────────────────────────────────────────────────
@@ -237,16 +228,7 @@ function ModalDemo({ onClose }: { onClose: () => void }) {
 }
 
 export default function LandingPage() {
-  const [impressions, setImpressions] = useState(1333)
-  const [screens]    = useState(1333)
   const [showDemo, setShowDemo] = useState(false)
-
-  useEffect(() => {
-    const t = setInterval(() => {
-      setImpressions(p => p + Math.floor(Math.random() * 3) + 1)
-    }, 1500)
-    return () => clearInterval(t)
-  }, [])
 
   return (
     <main style={{ minHeight: "100vh", background: "#080C18", color: "#fff", fontFamily: "'Inter', system-ui, sans-serif" }}>
@@ -358,14 +340,14 @@ export default function LandingPage() {
                 <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#10B981" }} />
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "#10B981" }}>
-                <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#10B981" }} /> LIVE · NOC
+                <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#10B981" }} /> Painel DOOHPLAY
               </div>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: "1rem" }}>
               {[
-                { value: "12.847", label: "Telas", color: "#3B82F6" },
-                { value: "84.2M",  label: "Impressões", color: "#10B981" },
-                { value: "97.3",   label: "Trust", color: "#10B981" },
+                { value: "Blockchain", label: "Prova auditável", color: "#3B82F6" },
+                { value: "ICP Brasil", label: "Timestamp certificado", color: "#10B981" },
+                { value: "Ativo",   label: "Proof-of-Play", color: "#10B981" },
               ].map(s => (
                 <div key={s.label} style={{ background: "rgba(255,255,255,0.04)", borderRadius: 10, padding: "10px 12px" }}>
                   <div style={{ fontSize: 20, fontWeight: 800, color: s.color }}>{s.value}</div>
@@ -390,46 +372,8 @@ export default function LandingPage() {
           </div>
           <div style={{ position: "absolute", top: -20, right: -20, background: "#12182B", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, padding: "12px 16px", boxShadow: "0 8px 24px rgba(0,0,0,0.4)" }}>
             <div style={{ fontSize: 11, color: "#64748B", marginBottom: 4 }}>Retail Media</div>
-            <div style={{ fontSize: 22, fontWeight: 800, color: "#10B981" }}>R$8.4M</div>
-            <div style={{ fontSize: 11, color: "#10B981" }}>+23% esse mês</div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: "#10B981" }}>Repasse automático</div>
           </div>
-        </div>
-      </section>
-
-      {/* LIVE NETWORK STATUS */}
-      <section style={{ maxWidth: 760, margin: "0 auto", padding: "0 2rem 4rem" }}>
-        <div style={{ background: "#0F1629", border: "1px solid rgba(16,185,129,0.2)", borderRadius: 16, padding: "1.25rem 1.5rem" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, fontWeight: 700, color: "#10B981", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 12 }}>
-            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#10B981" }} />
-            LIVE NETWORK STATUS
-          </div>
-          <div style={{ display: "flex", alignItems: "baseline", gap: 16, marginBottom: 8 }}>
-            <div>
-              <div style={{ fontSize: 36, fontWeight: 900, letterSpacing: "-0.03em" }}>{screens.toLocaleString("pt-BR")}</div>
-              <div style={{ fontSize: 13, color: "#64748B" }}>telas online agora</div>
-            </div>
-            <div style={{ fontSize: 28, fontWeight: 700, color: "#3B82F6" }}>
-              +{impressions - screens}
-              <div style={{ fontSize: 13, color: "#64748B", fontWeight: 400 }}>exibições verificadas / 30s</div>
-            </div>
-          </div>
-          <div style={{ display: "flex", gap: 16, fontSize: 12 }}>
-            <span style={{ color: "#10B981" }}>● Blockchain Sync</span>
-            <span style={{ color: "#3B82F6" }}>● ICP Brasil Ativo</span>
-            <span style={{ color: "#F59E0B" }}>● Trust 97.3</span>
-          </div>
-        </div>
-      </section>
-
-      {/* STATS */}
-      <section style={{ background: "#0A0F1E", borderTop: "1px solid rgba(255,255,255,0.04)", borderBottom: "1px solid rgba(255,255,255,0.04)", padding: "3rem 2rem" }}>
-        <div className="stats-grid" style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 0 }}>
-          {STATS.map((s, i) => (
-            <div key={s.label} style={{ textAlign: "center", padding: "1rem", borderRight: i < STATS.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none" }}>
-              <div style={{ fontSize: 28, fontWeight: 900, color: s.color, letterSpacing: "-0.02em" }}>{s.value}</div>
-              <div style={{ fontSize: 12, color: "#64748B", marginTop: 4 }}>{s.label}</div>
-            </div>
-          ))}
         </div>
       </section>
 
@@ -468,19 +412,17 @@ export default function LandingPage() {
                 <path d="M200,80 L280,60 L360,80 L420,140 L440,220 L420,300 L380,360 L320,400 L260,420 L200,400 L160,340 L140,260 L150,180 Z" stroke="#3B82F6" strokeWidth="1.5" fill="rgba(59,130,246,0.05)"/>
               </svg>
               {[
-                { city: "São Paulo",     x: "52%", y: "68%", color: "#10B981", count: 412 },
-                { city: "Rio de Janeiro",x: "62%", y: "60%", color: "#3B82F6", count: 218 },
-                { city: "Belo Horizonte",x: "55%", y: "55%", color: "#F59E0B", count: 142 },
-                { city: "Curitiba",      x: "50%", y: "76%", color: "#10B981", count: 76  },
-                { city: "Brasília",      x: "55%", y: "44%", color: "#3B82F6", count: 89  },
-                { city: "Salvador",      x: "68%", y: "38%", color: "#3B82F6", count: 88  },
-                { city: "Fortaleza",     x: "72%", y: "22%", color: "#EF4444", count: 32  },
-                { city: "Manaus",        x: "28%", y: "20%", color: "#94A3B8", count: 8   },
+                { city: "São Paulo",     x: "52%", y: "68%" },
+                { city: "Rio de Janeiro",x: "62%", y: "60%" },
+                { city: "Belo Horizonte",x: "55%", y: "55%" },
+                { city: "Curitiba",      x: "50%", y: "76%" },
+                { city: "Brasília",      x: "55%", y: "44%" },
+                { city: "Salvador",      x: "68%", y: "38%" },
+                { city: "Fortaleza",     x: "72%", y: "22%" },
+                { city: "Manaus",        x: "28%", y: "20%" },
               ].map(c => (
                 <div key={c.city} style={{ position: "absolute", left: c.x, top: c.y, transform: "translate(-50%,-50%)" }}>
-                  <div style={{ width: 28, height: 28, borderRadius: "50%", background: `${c.color}20`, border: `2px solid ${c.color}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 700, color: c.color }}>
-                    {c.count}
-                  </div>
+                  <div style={{ width: 14, height: 14, borderRadius: "50%", background: "#3B82F620", border: "2px solid #3B82F6" }} />
                   {c.city === "São Paulo" && <div style={{ fontSize: 9, color: "#94A3B8", textAlign: "center", marginTop: 2, whiteSpace: "nowrap" }}>{c.city}</div>}
                 </div>
               ))}
@@ -494,31 +436,17 @@ export default function LandingPage() {
             </div>
             <div style={{ background: "#080C18", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 20, overflow: "hidden" }}>
               <div style={{ padding: "1.25rem 1.5rem", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                <div style={{ fontSize: 14, fontWeight: 700, color: "#F1F5F9", marginBottom: 2 }}>São Paulo</div>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12 }}>
-                  <span style={{ color: "#64748B" }}>Telas</span><span style={{ color: "#F1F5F9", fontWeight: 600 }}>4.821</span>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, marginTop: 4 }}>
-                  <span style={{ color: "#64748B" }}>Trust Score</span><span style={{ color: "#10B981", fontWeight: 600 }}>98.1</span>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, marginTop: 4 }}>
-                  <span style={{ color: "#64748B" }}>SLA</span><span style={{ color: "#3B82F6", fontWeight: 600 }}>99.9%</span>
+                <div style={{ fontSize: 14, fontWeight: 700, color: "#F1F5F9", marginBottom: 6 }}>O que o Network Center mostra</div>
+                <div style={{ fontSize: 12, color: "#94A3B8", lineHeight: 1.6 }}>
+                  Status online/offline, Trust Score e SLA por praça, atualizados a partir dos dados reais de cada tela conectada.
                 </div>
               </div>
               {[
-                { city: "São Paulo",     telas: 4821, st: "#10B981" },
-                { city: "Rio de Janeiro",telas: 2140, st: "#3B82F6" },
-                { city: "Belo Horizonte",telas: 1203, st: "#10B981" },
-                { city: "Brasília",      telas: 891,  st: "#3B82F6" },
-                { city: "Curitiba",      telas: 724,  st: "#10B981" },
-                { city: "Porto Alegre",  telas: 612,  st: "#10B981" },
-              ].map((c, i) => (
-                <div key={c.city} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 1.5rem", borderBottom: i < 5 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
-                  <span style={{ fontSize: 13, color: "#CBD5E1" }}>{c.city}</span>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <span style={{ fontSize: 13, color: "#94A3B8" }}>{c.telas.toLocaleString("pt-BR")}</span>
-                    <span style={{ width: 6, height: 6, borderRadius: "50%", background: c.st, display: "inline-block" }} />
-                  </div>
+                "São Paulo", "Rio de Janeiro", "Belo Horizonte", "Brasília", "Curitiba", "Porto Alegre",
+              ].map((city, i) => (
+                <div key={city} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 1.5rem", borderBottom: i < 5 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
+                  <span style={{ fontSize: 13, color: "#CBD5E1" }}>{city}</span>
+                  <span style={{ fontSize: 11, color: "#475569" }}>ver ao vivo →</span>
                 </div>
               ))}
               <div style={{ padding: "12px 1.5rem" }}>
@@ -537,12 +465,12 @@ export default function LandingPage() {
           <h2 style={{ fontSize: 36, fontWeight: 800, letterSpacing: "-0.03em", margin: "0 0 12px" }}>Monetize suas telas automaticamente.</h2>
           <p style={{ fontSize: 16, color: "#64748B" }}>Anunciantes nacionais chegam diretamente na sua tela.</p>
         </div>
-        <div className="monetize-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+        <div className="monetize-grid" style={{ maxWidth: 560, margin: "0 auto" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {[
-              { icon: "📺", label: "Receita Local",    value: "R$847",   sub: "Por tela / mês",     color: "#10B981" },
-              { icon: "🔗", label: "Receita Regional", value: "R$12.4K", sub: "Rede de lojas / mês", color: "#3B82F6" },
-              { icon: "🌐", label: "Receita Nacional",  value: "R$8.4M",  sub: "Total rede / mês",   color: "#8B5CF6" },
+              { icon: "📺", label: "Repasse de anúncio",  value: "40%",        sub: "Sobre cada campanha exibida", color: "#10B981" },
+              { icon: "🔗", label: "Pagamento",           value: "Automático", sub: "Direto na sua conta, todo mês", color: "#3B82F6" },
+              { icon: "🌐", label: "Condições",           value: "Sem letra miúda", sub: "Cancele quando quiser",   color: "#8B5CF6" },
             ].map(r => (
               <div key={r.label} style={{ background: "#0F1629", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 16, padding: "1.25rem 1.5rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -556,35 +484,6 @@ export default function LandingPage() {
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={r.color} strokeWidth="2" strokeLinecap="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
               </div>
             ))}
-          </div>
-          <div style={{ background: "#0F1629", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 20, padding: "1.5rem" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1.5rem" }}>
-              <div>
-                <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 4 }}>Crescimento de Receita</div>
-                <div style={{ fontSize: 12, color: "#64748B" }}>Rede DOOHPLAY · últimos 6 meses</div>
-              </div>
-              <span style={{ background: "rgba(16,185,129,0.15)", color: "#10B981", fontSize: 12, fontWeight: 700, padding: "4px 10px", borderRadius: 20 }}>+23% / mês</span>
-            </div>
-            <div style={{ height: 120, display: "flex", alignItems: "flex-end", gap: 6, marginBottom: "1rem" }}>
-              {[35, 45, 52, 60, 72, 85].map((h, i) => (
-                <div key={i} style={{ flex: 1, background: i === 5 ? "#3B82F6" : "rgba(59,130,246,0.2)", borderRadius: "4px 4px 0 0", height: `${h}%` }} />
-              ))}
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 9, color: "#475569", marginBottom: "1.25rem" }}>
-              {["Jan","Fev","Mar","Abr","Mai","Jun"].map(m => <span key={m}>{m}</span>)}
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
-              {[
-                { label: "Fill Rate",   value: "78%",     color: "#10B981" },
-                { label: "CPM",         value: "R$18.40", color: "#3B82F6" },
-                { label: "Anunciantes", value: "1.247",   color: "#8B5CF6" },
-              ].map(s => (
-                <div key={s.label} style={{ background: "rgba(255,255,255,0.03)", borderRadius: 10, padding: "10px", textAlign: "center" }}>
-                  <div style={{ fontSize: 16, fontWeight: 700, color: s.color }}>{s.value}</div>
-                  <div style={{ fontSize: 10, color: "#64748B", marginTop: 2 }}>{s.label}</div>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </section>
@@ -661,16 +560,16 @@ export default function LandingPage() {
             🛡 Trust Center
           </div>
           <h2 style={{ fontSize: 36, fontWeight: 800, letterSpacing: "-0.03em", margin: "0 0 12px" }}>Confiança verificável.</h2>
-          <p style={{ fontSize: 16, color: "#64748B" }}>Trust Score em tempo real com auditoria pública e certificação ICP Brasil.</p>
+          <p style={{ fontSize: 16, color: "#64748B" }}>Trust Score calculado por tela, com auditoria pública e certificação ICP Brasil.</p>
         </div>
         <div className="trust-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, alignItems: "center" }}>
           <div style={{ textAlign: "center" }}>
             <svg width="200" height="200" viewBox="0 0 200 200">
               <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(59,130,246,0.1)" strokeWidth="16"/>
               <circle cx="100" cy="100" r="80" fill="none" stroke="#3B82F6" strokeWidth="16"
-                strokeDasharray={`${0.973 * 502} ${502}`} strokeLinecap="round"
-                transform="rotate(-90 100 100)"/>
-              <text x="100" y="95" textAnchor="middle" fill="#F1F5F9" fontSize="32" fontWeight="800">97.3</text>
+                strokeDasharray={`${0.85 * 502} ${502}`} strokeLinecap="round"
+                transform="rotate(-90 100 100)" opacity={0.5}/>
+              <text x="100" y="95" textAnchor="middle" fill="#F1F5F9" fontSize="20" fontWeight="800">Por tela</text>
               <text x="100" y="118" textAnchor="middle" fill="#64748B" fontSize="12">TRUST SCORE</text>
             </svg>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, maxWidth: 280, margin: "16px auto 0" }}>
@@ -678,7 +577,7 @@ export default function LandingPage() {
                 { label: "Assinatura ICP", value: "A3 Ativo",   color: "#10B981" },
                 { label: "Blockchain",     value: "Sync",       color: "#10B981" },
                 { label: "Merkle Root",    value: "Verified",   color: "#10B981" },
-                { label: "SLA",            value: "99.9%",      color: "#10B981" },
+                { label: "SLA",            value: "Monitorado", color: "#10B981" },
                 { label: "Auditoria",      value: "Pública",    color: "#3B82F6" },
                 { label: "LGPD",           value: "Compliance", color: "#F59E0B" },
               ].map(b => (
@@ -692,10 +591,10 @@ export default function LandingPage() {
           <div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
               {[
-                { icon: "🛡", label: "Trust Score",     value: "97.3", color: "#3B82F6" },
-                { icon: "✅", label: "Provas Auditadas", value: "4.8M", color: "#10B981" },
-                { icon: "📈", label: "SLA",              value: "99.9%",color: "#10B981" },
-                { icon: "👁", label: "Auditável",        value: "100%", color: "#8B5CF6" },
+                { icon: "🛡", label: "Trust Score",     value: "Por tela",    color: "#3B82F6" },
+                { icon: "✅", label: "Provas",           value: "Auditáveis", color: "#10B981" },
+                { icon: "📈", label: "SLA",              value: "Monitorado", color: "#10B981" },
+                { icon: "👁", label: "Auditável",        value: "100%",       color: "#8B5CF6" },
               ].map(s => (
                 <div key={s.label} style={{ background: "#0F1629", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 16, padding: "1.25rem" }}>
                   <div style={{ fontSize: 24, marginBottom: 8 }}>{s.icon}</div>
@@ -779,7 +678,7 @@ export default function LandingPage() {
       <section style={{ padding: "6rem 2rem", textAlign: "center" }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(59,130,246,0.1)", border: "1px solid rgba(59,130,246,0.25)", borderRadius: 20, padding: "6px 14px", fontSize: 12, color: "#3B82F6", marginBottom: "1.5rem" }}>
           <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#10B981" }} />
-          {screens.toLocaleString("pt-BR")} telas ativas agora
+          Rede em operação agora
         </div>
         <h2 style={{ fontSize: 48, fontWeight: 900, letterSpacing: "-0.04em", margin: "0 0 16px" }}>Comece a monetizar sua TV hoje.</h2>
         <p style={{ fontSize: 18, color: "#64748B", margin: "0 0 2rem" }}>7 dias grátis pra testar. Sem cartão de crédito agora.</p>
@@ -833,7 +732,7 @@ export default function LandingPage() {
           <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "1.5rem", display: "flex", justifyContent: "space-between", fontSize: 12, color: "#334155" }}>
             <span>© 2026 DOOHPLAY. Todos os direitos reservados.</span>
             <div style={{ display: "flex", gap: 16 }}>
-              <span style={{ color: "#10B981" }}>↑ 99.9% uptime</span>
+              <span style={{ color: "#10B981" }}>↑ Status da rede monitorado</span>
               <span>LGPD Compliance</span>
               <span>ICP Brasil</span>
             </div>
