@@ -1,4 +1,6 @@
 // app/planos/page.tsx
+"use client"
+import { useState } from "react"
 import Link from "next/link"
 import DemoModalButton from "../_components/DemoModalButton"
 
@@ -12,6 +14,15 @@ const BLUE   = "#3B82F6"
 const GREEN  = "#10B981"
 const PURPLE = "#8B5CF6"
 const AMBER  = "#F59E0B"
+
+// Ícone por plano — puramente visual, sem relação com dado real.
+function PlanIcon({ id, color }: { id: string; color: string }) {
+  const common = { width: 20, height: 20, viewBox: "0 0 24 24", fill: "none", stroke: color, strokeWidth: 2, strokeLinecap: "round" as const, strokeLinejoin: "round" as const }
+  if (id === "starter") return <svg {...common}><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+  if (id === "pro") return <svg {...common}><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+  if (id === "business") return <svg {...common}><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 9h1"/><path d="M9 13h1"/><path d="M14 9h1"/><path d="M14 13h1"/></svg>
+  return <svg {...common}><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+}
 
 const PLANS = [
   {
@@ -140,13 +151,13 @@ const FAQ = [
 ]
 
 export default function PlanosPage() {
+  const [openFaq, setOpenFaq] = useState<number | null>(null)
   return (
     <main style={{ minHeight: "100vh", background: BG, color: TEXT, fontFamily: "'Inter', system-ui, sans-serif" }}>
 
       <style>{`
         @media (max-width: 768px) {
           .plans-grid { grid-template-columns: 1fr !important; }
-          .faq-grid { grid-template-columns: 1fr !important; }
           .compare-table { font-size: 11px !important; }
           .plans-title { font-size: 28px !important; }
           .cta-btns { flex-direction: column !important; align-items: stretch !important; }
@@ -182,6 +193,13 @@ export default function PlanosPage() {
           <p style={{ fontSize: 16, color: TEXT2, maxWidth: 520, margin: "0 auto" }}>
             7 dias grátis pra testar. Depois, assinatura simples — sem letra miúda.
           </p>
+          <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginTop: 20 }}>
+            {["🔗 Blockchain Polygon", "🇧🇷 ICP Brasil", "✅ Proof-of-Play auditável"].map(badge => (
+              <span key={badge} style={{ fontSize: 12, color: TEXT2, border: `1px solid ${BORDER}`, borderRadius: 20, padding: "5px 12px", background: SURF }}>
+                {badge}
+              </span>
+            ))}
+          </div>
         </div>
 
         {/* PLANOS */}
@@ -204,6 +222,12 @@ export default function PlanosPage() {
               )}
 
               <div style={{ marginBottom: "1.5rem" }}>
+                <div style={{
+                  width: 40, height: 40, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center",
+                  background: plan.color + "18", marginBottom: 14,
+                }}>
+                  <PlanIcon id={plan.id} color={plan.color} />
+                </div>
                 <div style={{ fontSize: 13, fontWeight: 600, color: plan.color, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8 }}>{plan.name}</div>
                 <div style={{ fontSize: 36, fontWeight: 900, color: TEXT, letterSpacing: "-0.03em", marginBottom: 4 }}>{plan.price}</div>
                 <div style={{ fontSize: 13, color: MUTED }}>{plan.period}</div>
@@ -293,13 +317,34 @@ export default function PlanosPage() {
         {/* FAQ */}
         <div style={{ marginBottom: "4rem" }}>
           <h2 style={{ fontSize: 28, fontWeight: 800, letterSpacing: "-0.03em", marginBottom: "2rem", textAlign: "center" }}>Perguntas frequentes</h2>
-          <div className="faq-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-            {FAQ.map((item, i) => (
-              <div key={i} style={{ background: SURF, border: `1px solid ${BORDER}`, borderRadius: 12, padding: "1.25rem 1.5rem" }}>
-                <div style={{ fontSize: 14, fontWeight: 700, color: TEXT, marginBottom: 8 }}>{item.q}</div>
-                <div style={{ fontSize: 13, color: TEXT2, lineHeight: 1.6 }}>{item.a}</div>
-              </div>
-            ))}
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, maxWidth: 720, margin: "0 auto" }}>
+            {FAQ.map((item, i) => {
+              const open = openFaq === i
+              return (
+                <div key={i} style={{ background: SURF, border: `1px solid ${BORDER}`, borderRadius: 12, overflow: "hidden" }}>
+                  <button
+                    type="button"
+                    onClick={() => setOpenFaq(open ? null : i)}
+                    style={{
+                      width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
+                      background: "transparent", border: "none", cursor: "pointer",
+                      padding: "1.1rem 1.5rem", textAlign: "left",
+                    }}
+                  >
+                    <span style={{ fontSize: 14, fontWeight: 700, color: TEXT }}>{item.q}</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={TEXT2} strokeWidth="2.5" strokeLinecap="round"
+                      style={{ flexShrink: 0, marginLeft: 12, transform: open ? "rotate(180deg)" : "none", transition: "transform 0.15s" }}>
+                      <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                  </button>
+                  {open && (
+                    <div style={{ padding: "0 1.5rem 1.1rem", fontSize: 13, color: TEXT2, lineHeight: 1.6 }}>
+                      {item.a}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
           </div>
         </div>
 
