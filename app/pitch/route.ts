@@ -137,15 +137,15 @@ html, body { width:100%; height:100%; overflow:hidden; background:#0B1120; font-
   <div class="slide slide-3">
     <div class="slide-num">03 / 06</div>
     <div class="logo-small">DOOH<span>PLAY</span></div>
-    <div class="tag">Números reais</div>
+    <div class="tag">Estimativa</div>
     <div class="headline" style="font-size:clamp(24px,6vw,36px)">O que você<br>pode ganhar</div>
     <div class="stat-grid">
-      <div class="stat"><div class="stat-num">1.2K</div><div class="stat-label">exibições/dia</div></div>
-      <div class="stat"><div class="stat-num">R$350</div><div class="stat-label">receita/mês</div></div>
+      <div class="stat"><div class="stat-num">1.2K</div><div class="stat-label">exibições/dia (exemplo)</div></div>
+      <div class="stat"><div class="stat-num">R$350</div><div class="stat-label">receita/mês (exemplo)</div></div>
       <div class="stat"><div class="stat-num">15min</div><div class="stat-label">instalação</div></div>
       <div class="stat"><div class="stat-num">0</div><div class="stat-label">trabalho extra</div></div>
     </div>
-    <div class="sub">Estabelecimento com movimento de segunda a sábado, TV ligada no horário comercial.</div>
+    <div class="sub">Exemplo ilustrativo pra um estabelecimento com movimento de segunda a sábado e TV ligada no horário comercial — o valor real varia por local e demanda de anunciantes.</div>
   </div>
 
   <!-- SLIDE 4 — Prova social -->
