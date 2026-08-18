@@ -99,11 +99,19 @@ Ainda pendentes de decisão, sem mudança nesta sessão:
 - Cards de stats da seção PERSONAS e tabela de exemplo do ProofChain
   Explorer na landing page real — marcados como exemplo, mas nunca
   formalmente revisados por completo.
-- "Ganhos Futuros" (projeção fixa), KPI "+12% esta semana" e banner
+- ~~"Ganhos Futuros" (projeção fixa), KPI "+12% esta semana" e banner
   "engajamento em até 40%" no dashboard do cliente — fundador escolheu
-  manter por enquanto.
-- AI Revenue Center: nomes de marca já trocados por categoria genérica
-  (feito antes), mas match%/valor/projeção/dicas continuam fixos.
+  manter por enquanto.~~ **Resolvido em 18/08/2026**: revisitado a
+  pedido do fundador. KPI virou "Hoje" (sem % inventado), "Ganhos
+  Futuros" ganhou aviso de "exemplo ilustrativo" e rótulos sem alegar
+  cálculo de IA, banner perdeu o número sem lastro. Commit `9b92e40`.
+- ~~AI Revenue Center: nomes de marca já trocados por categoria genérica
+  (feito antes), mas match%/valor/projeção/dicas continuam fixos.~~
+  **Resolvido em 18/08/2026**: números continuam fixos (mesmos pra
+  qualquer cliente) — isso não mudou —, mas a tela parou de afirmar que
+  uma IA real gerou esses dados: badge "IA Ativa" -> "Simulação",
+  "identificamos"/"identificadas pela IA" -> linguagem de exemplo
+  ilustrativo. Commit `9b92e40`.
 
 ## Áreas varridas e confirmadas limpas (sem achados)
 
