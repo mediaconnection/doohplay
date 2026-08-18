@@ -79,11 +79,16 @@ export default async function TrustCenterPage() {
   const stats = await getStats()
   const [proofs, riskItems] = await Promise.all([getRecentProofs(), getRiskBreakdown(stats.chainTotal, stats.chainInvalid, stats.anchored)])
   const { trustScore, riskScore, icpScore, failRate } = stats
+  // Nomes de marca real (Bradesco/iFood/Samsung/Natura) removidos em
+  // 17/08/2026: mesmo achado do /explorer (docs/relatorio-varredura-ampla-
+  // 17-08-2026.md) — mesmo rotulado "Dados de demonstração" na tela, ainda
+  // atribuía certificados fictícios a marcas reais. Trocado por categorias
+  // genéricas, mesmo padrão já usado em /explorer e no AI Revenue Center.
   const demoProofs = [
-    { event_hash: "0x7f3a4b2c1d9e8f7a6b5c4d3e2f1a0b9c", played_at: "2026-06-08T14:32:01", screen_label: "SCR-00847", campaign_name: "Bradesco Black Friday", cert_id: "CERT-2024-00847" },
-    { event_hash: "0x2c8ef91a3b4c5d6e7f8a9b0c1d2e3f4a", played_at: "2026-06-08T14:31:58", screen_label: "SCR-00123", campaign_name: "iFood Cupons",          cert_id: "CERT-2024-00123" },
-    { event_hash: "0x9b1da337c4e5f6a7b8c9d0e1f2a3b4c5", played_at: "2026-06-08T14:31:55", screen_label: "SCR-00512", campaign_name: "Samsung Galaxy",        cert_id: "CERT-2024-00512" },
-    { event_hash: "0x4e7fc28b1a2b3c4d5e6f7a8b9c0d1e2f", played_at: "2026-06-08T14:31:51", screen_label: "SCR-00089", campaign_name: "Natura Perfumes",       cert_id: "CERT-2024-00089" },
+    { event_hash: "0x7f3a4b2c1d9e8f7a6b5c4d3e2f1a0b9c", played_at: "2026-06-08T14:32:01", screen_label: "SCR-00847", campaign_name: "Varejo — Black Friday",   cert_id: "CERT-2024-00847" },
+    { event_hash: "0x2c8ef91a3b4c5d6e7f8a9b0c1d2e3f4a", played_at: "2026-06-08T14:31:58", screen_label: "SCR-00123", campaign_name: "Delivery — Cupons",       cert_id: "CERT-2024-00123" },
+    { event_hash: "0x9b1da337c4e5f6a7b8c9d0e1f2a3b4c5", played_at: "2026-06-08T14:31:55", screen_label: "SCR-00512", campaign_name: "Tecnologia — Lançamento", cert_id: "CERT-2024-00512" },
+    { event_hash: "0x4e7fc28b1a2b3c4d5e6f7a8b9c0d1e2f", played_at: "2026-06-08T14:31:51", screen_label: "SCR-00089", campaign_name: "Beleza — Linha sazonal",  cert_id: "CERT-2024-00089" },
   ]
   const displayProofs = proofs.length > 0 ? proofs : demoProofs
   const RADIUS = 80
