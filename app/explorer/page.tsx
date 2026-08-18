@@ -84,12 +84,18 @@ export default function ExplorerPage() {
     { id: 19284717, hash: "0x1b3c...e84a", merkle: "0x6c9d...a12e", txs: 612,  time: "14:31:47", status: "Ancorado"    },
   ]
 
+  // Nomes de marca real (Bradesco/iFood/Samsung/Natura/Ambev) removidos em
+  // 17/08/2026: esta é a lista de exemplo exibida quando /api/explorer/data
+  // não retorna dados reais — estava atribuindo campanhas fictícias, com
+  // status "Verified"/"Ancorado" na blockchain, a marcas reais que nunca
+  // anunciaram na rede. Trocado por categorias genéricas, mesmo padrão do
+  // AI Revenue Center (app/dashboard/local/[code]/ai-revenue/page.tsx).
   const DEMO_EVENTS = [
-    { hash: "0x7f3a...d4b2", screen: "SCR-00847", campaign: "Bradesco Black Friday", time: "14:32:01", status: "Verified" },
-    { hash: "0x2c8e...f91a", screen: "SCR-00123", campaign: "iFood Cupons",          time: "14:31:58", status: "Verified" },
-    { hash: "0x9b1d...a337", screen: "SCR-00512", campaign: "Samsung Galaxy",        time: "14:31:55", status: "Verified" },
-    { hash: "0x4e7f...c28b", screen: "SCR-00089", campaign: "Natura Perfumes",       time: "14:31:51", status: "Pending"  },
-    { hash: "0x1b3c...e84a", screen: "SCR-01024", campaign: "Ambev Verão",           time: "14:31:47", status: "Verified" },
+    { hash: "0x7f3a...d4b2", screen: "SCR-00847", campaign: "Varejo — Black Friday",     time: "14:32:01", status: "Verified" },
+    { hash: "0x2c8e...f91a", screen: "SCR-00123", campaign: "Delivery — Cupons",         time: "14:31:58", status: "Verified" },
+    { hash: "0x9b1d...a337", screen: "SCR-00512", campaign: "Tecnologia — Lançamento",   time: "14:31:55", status: "Verified" },
+    { hash: "0x4e7f...c28b", screen: "SCR-00089", campaign: "Beleza — Linha sazonal",    time: "14:31:51", status: "Pending"  },
+    { hash: "0x1b3c...e84a", screen: "SCR-01024", campaign: "Bebidas — Campanha de verão", time: "14:31:47", status: "Verified" },
   ]
 
   const displayBlocks = blocks.length > 0 ? blocks : DEMO_BLOCKS
@@ -139,7 +145,7 @@ export default function ExplorerPage() {
         {/* HEADER */}
         <div style={{ marginBottom: "2rem" }}>
           <h1 style={{ fontSize: 28, fontWeight: 800, letterSpacing: "-0.03em", margin: "0 0 6px" }}>ProofChain Explorer</h1>
-          <p style={{ fontSize: 14, color: TEXT2, margin: 0 }}>Blockchain · Ethereum Mainnet · ICP Brasil</p>
+          <p style={{ fontSize: 14, color: TEXT2, margin: 0 }}>Blockchain · Polygon Mainnet · ICP Brasil</p>
         </div>
 
         {/* SEARCH */}
@@ -243,7 +249,7 @@ export default function ExplorerPage() {
             { label: "Último Merkle Root", value: shortHash(latestMerkle, 10), icon: "#",  color: BLUE   },
             { label: "Último Block Hash",  value: "0x7f3a...d4b2",             icon: "□",  color: BLUE   },
             { label: "Última TX Hash",     value: shortHash(latestTx, 10),     icon: "🔗", color: BLUE   },
-            { label: "Network",            value: "Ethereum",                  icon: "◎",  color: AMBER  },
+            { label: "Network",            value: "Polygon",                   icon: "◎",  color: AMBER  },
             { label: "Anchored Events",    value: `${Math.round(totalBlocks * 847 / 2847).toLocaleString("pt-BR")}K`, icon: "📌", color: PURPLE },
           ].map(s => (
             <div key={s.label} style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: 14, padding: "1rem 1.25rem" }}>
@@ -313,7 +319,7 @@ export default function ExplorerPage() {
               { label: "Blockchain",  sub: "Ancorado",     color: GREEN  },
               { label: "Timestamp",   sub: "Verificado",   color: GREEN  },
               { label: "Certificate", sub: "Emitido",      color: GREEN  },
-              { label: "Network",     sub: "Ethereum",     color: BLUE   },
+              { label: "Network",     sub: "Polygon",      color: BLUE   },
               { label: "Compliance",  sub: "LGPD ✓",       color: AMBER  },
             ].map(s => (
               <div key={s.label} style={{ background: "rgba(255,255,255,0.03)", border: `1px solid ${BORDER}`, borderRadius: 10, padding: "12px 14px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>

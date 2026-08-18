@@ -141,7 +141,7 @@ footer { border-top:1px solid #1E293B; padding:24px; text-align:center; font-siz
 <!-- TV VISUAL -->
 <div class="tv-section">
   <div class="tv-wrap">
-    <div class="money-badge">+R$300<br>/mês</div>
+    <div class="money-badge">+R$300*<br>/mês</div>
     <div class="tv-frame">
       <div class="tv-screen">
         <div class="tv-badge">● AO VIVO</div>
@@ -150,8 +150,8 @@ footer { border-top:1px solid #1E293B; padding:24px; text-align:center; font-siz
           <div class="sub">R$ 8,90 — Só até às 10h</div>
         </div>
         <div class="tv-ad">
-          <div class="tv-ad-text">📍 Anúncio patrocinado · iFood</div>
-          <div class="tv-ad-logo">iFood</div>
+          <div class="tv-ad-text">📍 Anúncio patrocinado · Delivery</div>
+          <div class="tv-ad-logo">PedeJá</div>
         </div>
       </div>
     </div>
@@ -159,6 +159,7 @@ footer { border-top:1px solid #1E293B; padding:24px; text-align:center; font-siz
       <div class="tv-stand"></div>
       <div class="tv-base"></div>
     </div>
+    <div style="text-align:center;font-size:11px;color:#64748B;margin-top:10px">*Estimativa de exemplo — valor real varia por local e demanda de anunciantes</div>
   </div>
 </div>
 

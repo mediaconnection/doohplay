@@ -12,10 +12,13 @@ type Payment = { id: string; asaas_payment_id: string; value: number; status: st
 type AsaasPayment = { id: string; value: number; status: string; dueDate: string; paymentDate?: string; invoiceUrl?: string; billingType: string; description?: string }
 
 // ─── Colors ───────────────────────────────────────────────────────────────────
+// Azul/verde alinhados a paleta de marca usada no resto do site (landing,
+// planos, trust-center, /install, dashboard-client) - mesmo ajuste ja feito
+// nos outros arquivos.
 const C = {
   bg: "#F8FAFC", white: "#FFFFFF", border: "#E5E7EB", border2: "#F3F4F6",
-  blue: "#2563EB", blueLt: "#EFF6FF", blueBd: "#BFDBFE",
-  green: "#16A34A", greenLt: "#DCFCE7", greenBd: "#86EFAC",
+  blue: "#3B82F6", blueLt: "#EFF6FF", blueBd: "#BFDBFE",
+  green: "#10B981", greenLt: "#DCFCE7", greenBd: "#86EFAC",
   amber: "#D97706", amberLt: "#FFFBEB", amberBd: "#FDE68A",
   red: "#DC2626", redLt: "#FEF2F2", redBd: "#FECACA",
   gray50: "#F9FAFB", gray100: "#F3F4F6", gray200: "#E5E7EB",

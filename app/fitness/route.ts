@@ -147,7 +147,7 @@ footer { border-top:1px solid #1E293B; padding:24px; text-align:center; font-siz
 <!-- TV VISUAL -->
 <div class="tv-section">
   <div class="tv-wrap">
-    <div class="money-badge">+R$330<br>/mês</div>
+    <div class="money-badge">+R$330*<br>/mês</div>
     <div class="tv-frame">
       <div class="tv-screen">
         <div class="tv-badge">● AO VIVO</div>
@@ -165,6 +165,7 @@ footer { border-top:1px solid #1E293B; padding:24px; text-align:center; font-siz
       <div class="tv-stand"></div>
       <div class="tv-base"></div>
     </div>
+    <div style="text-align:center;font-size:11px;color:#64748B;margin-top:10px">*Estimativa de exemplo — valor real varia por local e demanda de anunciantes</div>
   </div>
 </div>
 

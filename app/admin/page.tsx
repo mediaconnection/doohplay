@@ -3038,7 +3038,7 @@ function TabInstitucional() {
       <div style={{ marginBottom: 24 }}>
         <div style={{ fontSize: 18, fontWeight: 700, color: TEXT }}>🏢 Conteúdo Institucional</div>
         <div style={{ fontSize: 13, color: TEXT2, marginTop: 2 }}>
-          O que o DOOHPLAY mostra nas telas — entra automaticamente na rotação de TODOS os clientes (≈10% do tempo no sorteio ponderado). Use com moderação.
+          O que o DOOHPLAY mostra nas telas — entra automaticamente na rotação de TODOS os clientes (≈5% do tempo no sorteio ponderado; peças com segmento definido entram como "canal" a ≈20% só nas telas do segmento). Use com moderação.
         </div>
       </div>
 
@@ -3057,7 +3057,7 @@ function TabInstitucional() {
           </div>
         </div>
         <div style={{ fontSize: 11, color: TEXT2, marginTop: -6, marginBottom: 12 }}>
-          Vídeos institucionais de até 3min são permitidos (exceção à regra geral de duração — este conteúdo ocupa só ≈10% do sorteio ponderado, então o impacto em inventário é menor).
+          Vídeos institucionais de até 3min são permitidos (exceção à regra geral de duração — este conteúdo ocupa só ≈5% do sorteio ponderado (≈20% se tiver segmento definido), então o impacto em inventário é menor).
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
           <div>
