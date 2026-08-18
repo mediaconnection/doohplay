@@ -297,19 +297,36 @@ export default function StudioEditorPage({ params }: { params: { code: string } 
       </div>
 
       {/* ── EDITOR ── */}
+      {/* Layout em 3 colunas (17/08/2026, upgrade visual inspirado no TV Studio
+          do Figma Make): galeria de templates vira sidebar fixa à esquerda,
+          canvas de preview no centro, painel de publicação à direita — mesmos
+          dados e handlers de sempre, só reorganizados. Não inclui os painéis
+          de "audiência ao vivo" nem "proof-of-play blockchain stream" do
+          Figma porque não existe dado real alimentando isso dentro do editor
+          hoje (decisão registrada com o fundador em 18/08/2026); também não
+          inclui Layers/Transição/Tipografia por camada — não são recursos
+          reais do editor atual, só existem no protótipo. */}
       {activeTab === "editor" && (
-        <div style={{ maxWidth: 1100, margin: "0 auto", padding: "1.5rem", display: "grid", gridTemplateColumns: "1fr 380px", gap: "1.5rem" }}>
-          <div>
-            <div style={{ marginBottom: "1.5rem" }}>
-              <div style={{ fontSize: 12, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 10 }}>Escolha o template</div>
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                {templates.map(tpl => (
-                  <button key={tpl.id} onClick={() => { setSelectedTpl(tpl); setForm(f => ({ ...f, headline: "", subline: "", cta: "" })) }} style={{ background: selectedTpl.id === tpl.id ? BRAND_LIGHT : "#f9fafb", border: selectedTpl.id === tpl.id ? `1.5px solid ${BRAND}` : "0.5px solid #e5e7eb", borderRadius: 10, padding: "8px 14px", cursor: "pointer", color: selectedTpl.id === tpl.id ? BRAND_DARK : "#6b7280", fontSize: 12, fontWeight: selectedTpl.id === tpl.id ? 600 : 400, display: "flex", alignItems: "center", gap: 6 }}>
-                    <span>{tpl.emoji}</span> {tpl.name}
-                  </button>
-                ))}
-              </div>
+        <div style={{ maxWidth: 1360, margin: "0 auto", padding: "1.5rem", display: "grid", gridTemplateColumns: "240px 1fr 340px", gap: "1.25rem", alignItems: "start" }}>
+
+          {/* Coluna 1 — Galeria de templates */}
+          <div style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 16, padding: "1rem", position: "sticky", top: "1rem" }}>
+            <div style={{ fontSize: 12, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 12, fontWeight: 600 }}>Templates</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {templates.map(tpl => (
+                <button key={tpl.id} onClick={() => { setSelectedTpl(tpl); setForm(f => ({ ...f, headline: "", subline: "", cta: "" })) }} style={{ display: "flex", alignItems: "center", gap: 10, textAlign: "left", background: selectedTpl.id === tpl.id ? BRAND_LIGHT : "#f9fafb", border: selectedTpl.id === tpl.id ? `1.5px solid ${BRAND}` : "1px solid #e5e7eb", borderRadius: 12, padding: 8, cursor: "pointer" }}>
+                  <div style={{ width: 40, height: 40, borderRadius: 8, background: tpl.bg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>{tpl.emoji}</div>
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ fontSize: 12, fontWeight: 600, color: selectedTpl.id === tpl.id ? BRAND_DARK : "#111827", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{tpl.name}</div>
+                    <div style={{ fontSize: 10, color: "#9ca3af", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{tpl.headline}</div>
+                  </div>
+                </button>
+              ))}
             </div>
+          </div>
+
+          {/* Coluna 2 — Canvas + personalização */}
+          <div>
             <div style={{ marginBottom: "1.5rem" }}>
               <div style={{ fontSize: 12, color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 10 }}>Preview ao vivo</div>
               <AdPreview tpl={selectedTpl} client={{...client, primary_color: clientAccent.replace("#","")}} form={form} imageUrl={imageUrl} />
@@ -351,6 +368,7 @@ export default function StudioEditorPage({ params }: { params: { code: string } 
             </div>
           </div>
 
+          {/* Coluna 3 — Publicar */}
           <div>
             <div style={{ background: "#fff", border: `1px solid #BAE6FD`, borderRadius: 16, overflow: "hidden", marginBottom: "1rem", position: "sticky", top: "1rem" }}>
               <div style={{ display: "flex", borderBottom: "1px solid #f3f4f6" }}>
