@@ -37,8 +37,11 @@ export default async function AIRevenuePage({ params }: { params: Promise<{ code
   // eram apresentados como se fossem prospects reais interessados nesta
   // tela especifica, o que nao e verdade - nenhuma dessas empresas tem
   // relacao real com este cliente. Trocado por categoria generica de
-  // anunciante. Match%, valor e projecao seguem fabricados (pendente de
-  // decisao, ver "Ganhos Futuros" no dashboard principal).
+  // anunciante. Resolução (17/08/2026): match%/valor/projeção continuam
+  // fixos (mesmos números pra qualquer cliente), mas a tela deixou de
+  // afirmar que uma IA real gerou esses números — ver badge "Simulação"
+  // e textos abaixo, trocados de "identificamos"/"IA Ativa" pra deixar
+  // claro que é um exemplo ilustrativo, não uma análise real do cliente.
   const opportunities = [
     {
       icon: "🏦", title: "Anunciante do setor financeiro — Cartão de crédito",
@@ -106,7 +109,7 @@ export default async function AIRevenuePage({ params }: { params: Promise<{ code
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span style={{ fontSize: 12, color: C.text2 }}>{client.name}</span>
           <span style={{ fontSize: 11, background: C.purpleLt, color: C.purple, fontWeight: 600, padding: "2px 8px", borderRadius: 20 }}>
-            ⭐ IA Ativa
+            ⭐ Simulação
           </span>
         </div>
       </header>
@@ -122,7 +125,7 @@ export default async function AIRevenuePage({ params }: { params: Promise<{ code
             <span style={{ color: "#FCD34D" }}>R$ 880/mês</span>
           </div>
           <div style={{ fontSize: 14, opacity: 0.85, marginBottom: 20 }}>
-            Com base no seu perfil ({client.business_type}), identificamos 4 oportunidades de receita que você ainda não está aproveitando.
+            Exemplo ilustrativo de oportunidades de receita para o perfil {client.business_type} — não é uma análise gerada a partir dos seus dados.
           </div>
           <div style={{ display: "flex", gap: 20 }}>
             {[
@@ -142,7 +145,7 @@ export default async function AIRevenuePage({ params }: { params: Promise<{ code
         <div style={{ background: C.white, border: `1px solid ${C.border}`, borderRadius: 12, padding: "20px 24px", marginBottom: 20 }}>
           <div style={{ fontSize: 15, fontWeight: 700, color: C.text, marginBottom: 4 }}>Projeção de receita</div>
           <div style={{ fontSize: 12, color: C.text3, marginBottom: 20 }}>
-            Se você ativar todas as oportunidades identificadas pela IA
+            Exemplo de como sua receita poderia evoluir se ativasse as oportunidades acima
           </div>
           <div style={{ display: "flex", alignItems: "flex-end", gap: 16, height: 120, marginBottom: 12 }}>
             {projection.map((p, i) => (
@@ -162,7 +165,7 @@ export default async function AIRevenuePage({ params }: { params: Promise<{ code
         </div>
 
         <div style={{ fontSize: 15, fontWeight: 700, color: C.text, marginBottom: 14 }}>
-          🎯 Oportunidades identificadas pela IA
+          🎯 Oportunidades de exemplo
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 28 }}>
           {opportunities.map((op, i) => (
@@ -211,7 +214,7 @@ export default async function AIRevenuePage({ params }: { params: Promise<{ code
             Quer maximizar sua receita?
           </div>
           <div style={{ fontSize: 13, color: C.text2, marginBottom: 20 }}>
-            Nossa equipe pode ajudar a ativar todas as oportunidades identificadas.
+            Nossa equipe pode te ajudar a avaliar oportunidades reais de receita pra sua tela.
           </div>
           <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
             <Link href={`/dashboard/local/${code}`} style={{ padding: "10px 24px", borderRadius: 8, border: `1px solid ${C.border}`, fontSize: 13, fontWeight: 600, color: C.text2, textDecoration: "none" }}>

@@ -478,10 +478,13 @@ function TabDashboard({ client, player, stats, playlist, payments, onNav, onAddP
   const activeAds = ads.filter((a: any) => a.status === "Ativo")
   const currentAd = activeAds[0] ?? null
   const nextAd = activeAds[1] ?? null
+  // Cenário ilustrativo (17/08/2026) — valores fixos, não são gerados por IA
+  // nem calculados a partir dos dados reais deste cliente. Rótulos ajustados
+  // pra não afirmar "estimado pela IA" (não existe cálculo de IA por trás).
   const futuros = [
-    { month: "Jul/26", value: 980,  label: "Receita prevista"  },
-    { month: "Ago/26", value: 1120, label: "Estimado pela IA"  },
-    { month: "Set/26", value: 1240, label: "Projeção otimista" },
+    { month: "Jul/26", value: 980,  label: "Exemplo — cenário 1"  },
+    { month: "Ago/26", value: 1120, label: "Exemplo — cenário 2"  },
+    { month: "Set/26", value: 1240, label: "Exemplo — cenário 3" },
   ]
   return (
     <div>
@@ -507,7 +510,7 @@ function TabDashboard({ client, player, stats, playlist, payments, onNav, onAddP
       <div className="db-kpis" style={{ display: "flex", gap: 12, marginBottom: 20, flexWrap: "wrap" }}>
         <KpiCard label="Receita este mês" value={fmtR(revenue)}    sub="Confirmado"       icon="💵" color={C.green} />
         <KpiCard label="Campanhas ativas" value={String(activeAds.length)} sub={ads.length > activeAds.length ? `${ads.length - activeAds.length} pausada(s)` : "—"} icon="▶"  color={C.blue}  />
-        <KpiCard label="Visualizações"    value={fmt(vizToday)}    sub="+12% esta semana" icon="👁" color={C.blue}  />
+        <KpiCard label="Visualizações"    value={fmt(vizToday)}    sub="Hoje" icon="👁" color={C.blue}  />
         <KpiCard label="Status da TV"     value={online ? "Online" : "Offline"} sub={player?.id ? `SCR-${player.id.slice(0,5).toUpperCase()}` : "—"} icon="📶" color={online ? C.green : C.red} />
       </div>
 
@@ -578,7 +581,8 @@ function TabDashboard({ client, player, stats, playlist, payments, onNav, onAddP
       </div>
 
       <div style={{ background: C.white, border: `1px solid ${C.border}`, borderRadius: 12, padding: "16px 18px" }}>
-        <div style={{ fontSize: 14, fontWeight: 600, color: C.text, marginBottom: 14 }}>Ganhos Futuros</div>
+        <div style={{ fontSize: 14, fontWeight: 600, color: C.text, marginBottom: 2 }}>Ganhos Futuros</div>
+        <div style={{ fontSize: 11, color: C.text3, marginBottom: 12 }}>Exemplo ilustrativo de como sua receita pode evoluir — não é uma projeção calculada a partir dos seus dados.</div>
         <div className="db-futuros" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10 }}>
           {futuros.map((f, i) => (
             <div key={i} style={{ background: i === 0 ? C.blueLt : C.gray50, border: `1px solid ${i === 0 ? C.blueBd : C.border2}`, borderRadius: 10, padding: "14px" }}>
@@ -1369,7 +1373,7 @@ function TabAnuncios({ stats, payments, code, onAddPromo }: any) {
       <div style={{ background: C.blueLt, border: `1px solid ${C.blueBd}`, borderRadius: 12, padding: "14px 18px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
         <div>
           <div style={{ fontSize: 13, fontWeight: 600, color: C.blue }}>Adicione uma promoção da sua loja</div>
-          <div style={{ fontSize: 12, color: C.text3 }}>Aumente o engajamento em até 40%</div>
+          <div style={{ fontSize: 12, color: C.text3 }}>Conteúdo próprio ajuda a prender mais a atenção de quem está na fila</div>
         </div>
         <button onClick={onAddPromo} style={{ background: C.blue, color: C.white, border: "none", borderRadius: 8, padding: "8px 16px", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>+ Adicionar</button>
       </div>
