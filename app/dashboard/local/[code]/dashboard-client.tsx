@@ -4,16 +4,18 @@ import { useState, useCallback, useRef, useEffect } from "react"
 import type { ClientData, PlayerData, StatsData, PlaylistItem, Payment } from "./page"
 import DtvReadyBadge from "@/components/ui/DtvReadyBadge"
 
+// Azul/verde alinhados a paleta de marca usada no resto do site (landing,
+// planos, trust-center, /install) - mesmo ajuste ja feito em /install.
 const C = {
   bg:      "#F8FAFC",
   white:   "#FFFFFF",
   sidebar: "#FFFFFF",
   border:  "#E5E7EB",
   border2: "#F3F4F6",
-  blue:    "#2563EB",
+  blue:    "#3B82F6",
   blueLt:  "#EFF6FF",
   blueBd:  "#BFDBFE",
-  green:   "#16A34A",
+  green:   "#10B981",
   greenLt: "#DCFCE7",
   greenBd: "#86EFAC",
   amber:   "#D97706",

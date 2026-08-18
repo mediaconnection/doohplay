@@ -4,10 +4,11 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { getPool } from "@/lib/db"
 
+// Azul/verde alinhados a paleta de marca usada no resto do site.
 const C = {
   bg: "#F8FAFC", white: "#FFFFFF", border: "#E5E7EB", border2: "#F3F4F6",
-  blue: "#2563EB", blueLt: "#EFF6FF", blueBd: "#BFDBFE",
-  green: "#16A34A", greenLt: "#DCFCE7", greenBd: "#86EFAC",
+  blue: "#3B82F6", blueLt: "#EFF6FF", blueBd: "#BFDBFE",
+  green: "#10B981", greenLt: "#DCFCE7", greenBd: "#86EFAC",
   amber: "#D97706", amberLt: "#FFFBEB",
   purple: "#7C3AED", purpleLt: "#F5F3FF",
   text: "#111827", text2: "#6B7280", text3: "#9CA3AF",
@@ -32,27 +33,33 @@ export default async function AIRevenuePage({ params }: { params: Promise<{ code
 
   if (!client) notFound()
 
+  // Nomes de marca real (Itaú/iFood/Samsung/Natura) removidos em 17/08/2026:
+  // eram apresentados como se fossem prospects reais interessados nesta
+  // tela especifica, o que nao e verdade - nenhuma dessas empresas tem
+  // relacao real com este cliente. Trocado por categoria generica de
+  // anunciante. Match%, valor e projecao seguem fabricados (pendente de
+  // decisao, ver "Ganhos Futuros" no dashboard principal).
   const opportunities = [
     {
-      icon: "🏦", title: "Banco Itaú — Campanha Cartão",
+      icon: "🏦", title: "Anunciante do setor financeiro — Cartão de crédito",
       desc: "Campanha de 90 dias · CPM R$ 12,00 · alto match com seu público de renda média-alta.",
       value: "+R$ 240/mês", color: C.green, bg: C.greenLt, border: C.greenBd,
       match: "94%", category: "Financeiro",
     },
     {
-      icon: "🛵", title: "iFood — Promoção Delivery",
+      icon: "🛵", title: "Anunciante de delivery — Promoção",
       desc: "Anúncio rotativo · 15s · exibição em horário de almoço e jantar.",
       value: "+R$ 180/mês", color: C.blue, bg: C.blueLt, border: C.blueBd,
       match: "88%", category: "Alimentação",
     },
     {
-      icon: "📱", title: "Samsung — Lançamento Galaxy",
+      icon: "📱", title: "Anunciante de tecnologia — Lançamento de produto",
       desc: "Campanha nacional · 30s · alta CPM por ser campanha de lançamento.",
       value: "+R$ 320/mês", color: C.purple, bg: C.purpleLt, border: "#DDD6FE",
       match: "79%", category: "Tecnologia",
     },
     {
-      icon: "🧴", title: "Natura — Linha Verão",
+      icon: "🧴", title: "Anunciante de beleza — Linha sazonal",
       desc: "Campanha sazonal · junho a agosto · público feminino 25-45 anos.",
       value: "+R$ 140/mês", color: C.amber, bg: C.amberLt, border: "#FDE68A",
       match: "72%", category: "Beleza",

@@ -8,7 +8,7 @@ import { useState } from "react"
 
 const C = {
   bg: "#F8FAFC", white: "#FFFFFF", border: "#E5E7EB",
-  blue: "#2563EB", blueLt: "#EFF6FF",
+  blue: "#3B82F6", blueLt: "#EFF6FF",
   red: "#DC2626", redLt: "#FEF2F2",
   text: "#111827", text2: "#6B7280", text3: "#9CA3AF",
 }
