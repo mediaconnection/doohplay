@@ -28,26 +28,34 @@ const labelStyle: React.CSSProperties = {
   textTransform: "uppercase", letterSpacing: "0.04em",
 }
 
+// Preços e nomes de plano corrigidos em 17/08/2026 pra bater com /planos
+// (página pública de preços) e com a ferramenta de assinatura do admin —
+// achado da varredura ampla: este arquivo mostrava Starter R$197/Pro R$347/
+// Multi R$547, valores e até nome de plano diferentes do resto do site, que
+// usa Starter R$97/Pro R$290/Business R$620. Confirmado com o fundador que
+// R$97/290/620 é o valor correto. Também removida a claim fixa "Score de
+// confiança 100/100" (mesmo padrão de fabricação já corrigido em outras
+// páginas nesta sessão — não vem de nenhum dado real).
 const PLANS = [
   {
-    id: "starter", name: "Starter", price: 197,
+    id: "starter", name: "Starter", price: 97,
     description: "Ideal para começar",
     color: BLUE,
-    features: ["1 tela ativa", "Certificado de veiculação mensal", "Portal público de verificação", "Relatório mensal via WhatsApp", "Score de confiança 100/100"],
+    features: ["1 tela ativa", "Certificado de veiculação mensal", "Portal público de verificação", "Relatório mensal via WhatsApp", "Proof-of-Play auditável"],
     adSpace: "30%", highlight: false,
   },
   {
-    id: "pro", name: "Pro", price: 347,
+    id: "pro", name: "Pro", price: 290,
     description: "Mais recursos e visibilidade",
     color: PURPLE,
-    features: ["1 tela ativa", "Tudo do Starter", "Conteúdo dinâmico (clima + notícias)", "Relatório de audiência mensal", "10% desconto após 3 meses"],
+    features: ["3 telas ativas", "Tudo do Starter", "Conteúdo dinâmico (clima + notícias)", "Relatório de audiência mensal", "Suporte prioritário"],
     adSpace: "40%", highlight: true,
   },
   {
-    id: "multi", name: "Multi", price: 547,
-    description: "Para quem quer crescer",
+    id: "business", name: "Business", price: 620,
+    description: "Para quem tem mais de uma tela no mesmo negócio",
     color: GREEN,
-    features: ["2 telas ativas", "Tudo do Pro", "Painel do cliente dedicado", "20% desconto após 6 meses", "Suporte prioritário"],
+    features: ["Até 5 telas ativas", "Tudo do Pro", "Painel do cliente dedicado", "Relatórios semanais", "Suporte dedicado"],
     adSpace: "50%", highlight: false,
   },
 ]
@@ -407,7 +415,6 @@ export default function OnboardingPage() {
             <span>🔐 ICP-Brasil</span>
             <span>⛓ Blockchain</span>
             <span>📋 Certificado mensal</span>
-            <span>✅ Score 100/100</span>
           </div>
         </div>
       </div>

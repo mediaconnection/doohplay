@@ -122,10 +122,21 @@ Confirmado: são exatamente 3 arquivos com o bug (`advertiser`, `meninos-da-vila
 referência pra correção, e 2 usos do hash que são legítimos e não precisam
 mudar. Não há mais nenhuma ocorrência escondida em outro lugar do `app/`.
 
+## Resolução (17/08/2026)
+
+Corrigido nos 3 arquivos, seguindo o padrão de `app/portal/[code]/page.tsx`:
+
+- `app/zimerman/page.tsx` e `app/meninos-da-vila/page.tsx`: novo helper
+  `getTrustScore()` busca `trust_score` real via `JOIN players` pelo
+  `player_id` do evento, com fallback honesto de 97 (igual ao portal). O
+  link "Ver prova" agora usa `play.event_hash || DEMO_HASH` em vez do hash
+  fixo.
+- `app/advertiser/page.tsx`: link "Ver prova" corrigido do mesmo jeito.
+  O "Score 100/100" do rodapé foi **removido** (não substituído por um
+  número) porque esta página agrega exibições de múltiplas campanhas e
+  telas diferentes — não existe um "trust score" único e honesto pra
+  representar o agregado, diferente das páginas de cliente único.
+
 ## Pendências / próximo passo
 
-- [ ] Decidir quando aplicar a correção acima nos 3 arquivos com o bug
-      (`/zimerman`, `/meninos-da-vila`, `/advertiser`), usando
-      `app/portal/[code]/page.tsx` como referência do padrão correto.
-- [ ] Decidir também sobre o `Score 100/100` fixo, que aparece nos mesmos
-      3 arquivos (ver seção principal acima).
+- [x] ~~Decidir quando aplicar a correção~~ — aplicada nos 3 arquivos.

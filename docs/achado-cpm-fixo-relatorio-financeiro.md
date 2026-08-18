@@ -64,18 +64,25 @@ reais (contabilidade, relatório pra sócio/investidor, declaração fiscal),
 os números fechados mês a mês não representam receita real — representam
 `(execuções / 1000) × R$25`, uma fórmula sem nenhuma base de preço real.
 
+## Resolução (17/08/2026)
+
+Confirmado com o fundador: `monthly_financial_snapshots` **não** alimenta
+nenhum processo real de contabilidade/relatório financeiro — é um
+relatório interno/legado. Ação tomada:
+
+- `app/dashboard/reports/campaigns/page.tsx`: coluna e KPI renomeados pra
+  "Valor estimado (R$)", com nota explícita na tela dizendo que o CPM é
+  fixo/de referência, não o preço real cobrado por campanha.
+- `app/api/finance/close-month/route.ts`: **não foi bloqueado nem
+  alterado no cálculo** — como não alimenta contabilidade real, mantido
+  funcional, só com comentário no código deixando claro que o valor
+  gravado não é receita real, pra qualquer sessão futura que mexer nisso.
+
 ## Pendências / próximo passo
 
-- [ ] Confirmar se `monthly_financial_snapshots` é consumida por algum
-      processo real de contabilidade/relatório financeiro fora deste
-      código (planilha, sistema externo, relatório pro contador).
-- [ ] Se for usada de verdade: decidir a fonte de preço real (campo
-      `budget` da tabela `"Campaign"`? valor por plano do cliente? outra
-      coisa?) antes de qualquer correção de código.
-- [ ] Se não for usada de verdade (sistema legado/paralelo do front
-      `src/` de prova/blockchain, sem relação com a receita real do
-      front `app/` de produção): documentar isso explicitamente aqui e
-      decidir se vale rotular como "estimativa" na tela ou desativar o
-      relatório.
-- [ ] Enquanto não decidido, **não chamar `/api/finance/close-month` em
-      produção** assumindo que o valor gravado é receita real.
+- [x] ~~Confirmar se `monthly_financial_snapshots` é consumida por algum
+      processo real de contabilidade~~ — confirmado que não é.
+- [ ] Se no futuro decidirem usar `monthly_financial_snapshots` pra
+      contabilidade real, revisar a fonte de preço (campo `budget` da
+      tabela `"Campaign"`? valor por plano do cliente?) antes de confiar
+      no valor gravado.

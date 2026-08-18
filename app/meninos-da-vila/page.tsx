@@ -32,6 +32,27 @@ const CLIENT_LIGHT = "#FFF7ED"
 const CLIENT_BORDER = "#FED7AA"
 const CLIENT_DARK = "#C2410C"
 
+// Corrigido em 17/08/2026: antes o Score era um texto fixo "100/100",
+// sem relação com nenhum dado real (achado registrado em
+// docs/achado-score-fixo-prova-fake-zimerman-meninos.md). Agora busca o
+// trust_score real do player associado à campanha, mesmo padrão já usado
+// em app/portal/[code]/page.tsx (fallback honesto de 97, não 100).
+async function getTrustScore(): Promise<number> {
+  try {
+    const r = await Promise.race([
+      pool.query(`
+        SELECT p.trust_score
+        FROM display_events e
+        JOIN players p ON p.id = e.player_id
+        WHERE e.campaign_id = $1
+        LIMIT 1
+      `, [CAMPAIGN_ID]),
+      new Promise((_, j) => setTimeout(() => j(new Error("timeout")), 4000))
+    ]) as any
+    return r.rows?.[0]?.trust_score ?? 97
+  } catch { return 97 }
+}
+
 async function getStats(): Promise<Stats> {
   try {
     const r = await Promise.race([
@@ -79,7 +100,7 @@ function fmtDate(d?: string | null) {
 }
 
 export default async function MeninosDaVilaPage() {
-  const [stats, plays] = await Promise.all([getStats(), getRecentPlays()])
+  const [stats, plays, trustScore] = await Promise.all([getStats(), getRecentPlays(), getTrustScore()])
 
   return (
     <main style={{ minHeight: "100vh", background: "#f9fafb", color: "#111827", fontFamily: "system-ui, sans-serif" }}>
@@ -126,7 +147,7 @@ export default async function MeninosDaVilaPage() {
             { label: "Exibições verificadas", value: stats.total_plays.toLocaleString("pt-BR"), accent: false },
             { label: "Esta semana",            value: stats.plays_week.toLocaleString("pt-BR"),  accent: false },
             { label: "Hoje",                   value: stats.plays_today.toLocaleString("pt-BR"), accent: false },
-            { label: "Score de confiança",     value: "100/100",                                  accent: true  },
+            { label: "Score de confiança",     value: `${trustScore}/100`,                        accent: true  },
           ].map(s => (
             <div key={s.label} style={{ background: s.accent ? CLIENT_LIGHT : "#fff", border: `0.5px solid ${s.accent ? CLIENT_BORDER : "#e5e7eb"}`, borderRadius: 14, padding: "1.25rem", textAlign: "center" }}>
               <div style={{ fontSize: 28, fontWeight: 600, color: s.accent ? CLIENT : "#111827", letterSpacing: "-0.02em", lineHeight: 1 }}>{s.value}</div>
@@ -178,7 +199,7 @@ export default async function MeninosDaVilaPage() {
                   </div>
                 </div>
               </div>
-              <Link href={`/verify/${DEMO_HASH}`} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: BRAND_LIGHT, border: `0.5px solid ${BRAND_BORDER}`, borderRadius: 8, padding: "6px 14px", fontSize: 12, color: BRAND_DARK, textDecoration: "none", fontWeight: 500 }}>
+              <Link href={`/verify/${play.event_hash || DEMO_HASH}`} style={{ display: "inline-flex", alignItems: "center", gap: 6, background: BRAND_LIGHT, border: `0.5px solid ${BRAND_BORDER}`, borderRadius: 8, padding: "6px 14px", fontSize: 12, color: BRAND_DARK, textDecoration: "none", fontWeight: 500 }}>
                 Ver prova
               </Link>
             </div>
@@ -204,7 +225,7 @@ export default async function MeninosDaVilaPage() {
 
         {/* ── TAGS ── */}
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "center", marginBottom: "1.5rem" }}>
-          {["SHA-256", "Merkle", "Polygon", "ICP-Brasil", "Score 100/100"].map(tag => (
+          {["SHA-256", "Merkle", "Polygon", "ICP-Brasil", `Score ${trustScore}/100`].map(tag => (
             <span key={tag} style={{ background: BRAND_LIGHT, border: `0.5px solid ${BRAND_BORDER}`, borderRadius: 20, padding: "4px 12px", fontSize: 11, fontWeight: 500, color: BRAND_DARK }}>{tag}</span>
           ))}
         </div>

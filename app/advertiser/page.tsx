@@ -319,7 +319,7 @@ export default async function AdvertiserPage() {
                     </td>
                     <td style={tdStyle}>
                       <Link
-                        href="/verify/20ec722b179a772ddc19c2a6053326906da1e598cc3dcaeed4a48efee2f950be"
+                        href={`/verify/${play.event_hash || "20ec722b179a772ddc19c2a6053326906da1e598cc3dcaeed4a48efee2f950be"}`}
                         style={{ display: "inline-flex", alignItems: "center", gap: 4, background: BRAND_LIGHT, border: `0.5px solid ${BRAND_BORDER}`, borderRadius: 8, padding: "5px 12px", fontSize: 12, color: BRAND_DARK, textDecoration: "none", fontWeight: 500, whiteSpace: "nowrap" }}
                       >
                         Ver prova
@@ -332,7 +332,7 @@ export default async function AdvertiserPage() {
           </div>
 
           <div style={{ padding: "10px 20px", borderTop: "0.5px solid #f3f4f6", fontSize: 11, color: "#9ca3af" }}>
-            SHA-256 · Merkle Tree · Polygon Mainnet · TSA RFC3161 · Score 100/100
+            SHA-256 · Merkle Tree · Polygon Mainnet · TSA RFC3161
           </div>
         </div>
 

@@ -9,6 +9,14 @@ export const revalidate = 0
 // Achado na revisão do papel operador (10/07/2026): rota sem nenhuma
 // autenticação — nem sessão, nem secret. Fechamento de mês é ação
 // financeira irreversível (grava snapshot), mesma régua de finance/asaas.
+//
+// Achado na varredura ampla (17/08/2026, docs/achado-cpm-fixo-relatorio-
+// financeiro.md): o snapshot é gravado com CPM fixo de R$25, sem relação
+// com preço real cobrado por campanha. Confirmado com o fundador que
+// monthly_financial_snapshots NÃO alimenta contabilidade real (é legado/
+// interno) — por isso mantido como está, sem bloquear a rota. Se algum dia
+// isso virar fonte de contabilidade de verdade, o cálculo abaixo precisa
+// ser trocado por preço real por campanha antes de confiar no valor.
 export async function POST(req: NextRequest) {
   if (!(await requireSuperAdmin(req))) return NextResponse.json({ error: "unauthorized" }, { status: 401 })
 

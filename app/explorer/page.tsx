@@ -98,8 +98,10 @@ export default function ExplorerPage() {
     { hash: "0x1b3c...e84a", screen: "SCR-01024", campaign: "Bebidas — Campanha de verão", time: "14:31:47", status: "Verified" },
   ]
 
-  const displayBlocks = blocks.length > 0 ? blocks : DEMO_BLOCKS
-  const displayEvents = events.length > 0 ? events : DEMO_EVENTS
+  const usingDemoBlocks = blocks.length === 0
+  const usingDemoEvents = events.length === 0
+  const displayBlocks = usingDemoBlocks ? DEMO_BLOCKS : blocks
+  const displayEvents = usingDemoEvents ? DEMO_EVENTS : events
 
   return (
     <main style={{ minHeight: "100vh", background: BG, color: TEXT, fontFamily: "'Inter', system-ui, sans-serif" }}>
@@ -265,7 +267,12 @@ export default function ExplorerPage() {
 
           {/* Últimos Blocos */}
           <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: 16, overflow: "hidden" }}>
-            <div style={{ padding: "1rem 1.5rem", borderBottom: `1px solid ${BORDER}`, fontSize: 15, fontWeight: 700 }}>Últimos Blocos</div>
+            <div style={{ padding: "1rem 1.5rem", borderBottom: `1px solid ${BORDER}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <span style={{ fontSize: 15, fontWeight: 700 }}>Últimos Blocos</span>
+              {usingDemoBlocks && (
+                <span style={{ fontSize: 10, fontWeight: 600, padding: "2px 8px", borderRadius: 20, background: "rgba(245,158,11,0.12)", color: AMBER }}>Dados de demonstração</span>
+              )}
+            </div>
             {displayBlocks.map((b: any, i: number) => (
               <div key={b.id} style={{ padding: "12px 1.5rem", borderBottom: i < displayBlocks.length - 1 ? `1px solid rgba(255,255,255,0.04)` : "none", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                 <div style={{ flex: 1 }}>
@@ -288,7 +295,12 @@ export default function ExplorerPage() {
 
           {/* Últimos Eventos */}
           <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: 16, overflow: "hidden" }}>
-            <div style={{ padding: "1rem 1.5rem", borderBottom: `1px solid ${BORDER}`, fontSize: 15, fontWeight: 700 }}>Últimos Eventos</div>
+            <div style={{ padding: "1rem 1.5rem", borderBottom: `1px solid ${BORDER}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <span style={{ fontSize: 15, fontWeight: 700 }}>Últimos Eventos</span>
+              {usingDemoEvents && (
+                <span style={{ fontSize: 10, fontWeight: 600, padding: "2px 8px", borderRadius: 20, background: "rgba(245,158,11,0.12)", color: AMBER }}>Dados de demonstração</span>
+              )}
+            </div>
             {displayEvents.map((e: any, i: number) => (
               <div key={i} style={{ padding: "12px 1.5rem", borderBottom: i < displayEvents.length - 1 ? `1px solid rgba(255,255,255,0.04)` : "none" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>

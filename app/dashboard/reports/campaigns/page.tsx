@@ -137,6 +137,14 @@ export default async function CampaignReportsPage({
   return (
     <div className="space-y-6 p-6">
       <h1 className="text-2xl font-semibold">📊 Relatório de Campanhas</h1>
+      {/* Achado na varredura ampla de 17/08/2026 (docs/achado-cpm-fixo-relatorio-financeiro.md):
+          o valor abaixo usa um CPM fixo de R$25 hardcoded na query, sem relação com o preço
+          real cobrado por campanha. Confirmado com o fundador que esta tela não alimenta
+          contabilidade real (é um relatório interno/legado) — por isso rotulado como
+          "estimado" em vez de removido. */}
+      <p className="text-sm text-gray-500">
+        Valor calculado com CPM fixo de referência (R$25) — é uma estimativa interna, não o preço real cobrado por campanha.
+      </p>
 
       <div className="flex flex-wrap items-center gap-3">
         <FilterButton label="Hoje" period="today" campaign={params.campaign} />
@@ -172,7 +180,7 @@ export default async function CampaignReportsPage({
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Kpi title="Execuções" value={totalExecutions} />
         <Kpi title="Tempo (s)" value={totalSeconds} />
-        <Kpi title="Valor (R$)" value={totalGross.toFixed(2)} />
+        <Kpi title="Valor estimado (R$)" value={totalGross.toFixed(2)} />
       </div>
 
       <div className="overflow-hidden rounded-lg border">
@@ -182,7 +190,7 @@ export default async function CampaignReportsPage({
               <th className="p-3 text-left">Campanha</th>
               <th className="p-3 text-right">Execuções</th>
               <th className="p-3 text-right">Tempo (s)</th>
-              <th className="p-3 text-right">Valor (R$)</th>
+              <th className="p-3 text-right">Valor estimado (R$)</th>
             </tr>
           </thead>
 
