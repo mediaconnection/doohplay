@@ -276,7 +276,10 @@ export default function StudioEditorPage({ params }: { params: { code: string } 
         </div>
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
           <div style={{ background: "#16a34a20", border: "1px solid #16a34a40", borderRadius: 999, padding: "4px 12px", fontSize: 11, color: "#16a34a" }}>Tela online</div>
-          <button onClick={() => router.push("/zimerman")} style={{ background: "transparent", border: "1px solid #e5e7eb", borderRadius: 8, padding: "6px 12px", fontSize: 11, color: "#6b7280", cursor: "pointer" }}>Ver portal</button>
+          {/* Achado na varredura ampla (17/08/2026): estava hardcoded pra /zimerman,
+              então qualquer cliente usando o Studio caía no portal do Zimermam ao
+              clicar aqui. Corrigido pra usar a rota genérica /portal/[code]. */}
+          <button onClick={() => router.push(`/portal/${code}`)} style={{ background: "transparent", border: "1px solid #e5e7eb", borderRadius: 8, padding: "6px 12px", fontSize: 11, color: "#6b7280", cursor: "pointer" }}>Ver portal</button>
         </div>
       </header>
 
