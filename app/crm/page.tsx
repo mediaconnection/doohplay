@@ -41,7 +41,10 @@ type Lead = {
 
 function newLead(): Lead {
   return {
-    id: Math.random().toString(36).slice(2),
+    // id vazio = "ainda não existe no banco" (Fase 46, 17/08/2026). Antes
+    // era um id fake gerado no navegador; agora o id real vem do servidor
+    // quando o lead é criado — handleSave usa isso pra decidir POST vs PATCH.
+    id: "",
     name: "",
     business_type: "Barbearia",
     city: "São Paulo",
@@ -219,46 +222,100 @@ function Modal({ lead, onSave, onClose }: { lead: Lead; onSave: (l: Lead) => voi
   )
 }
 
-const STORAGE_KEY = "doohplay_crm_leads"
-const PIN = "dooh2026"
-
+// Fase 46 (17/08/2026): CRM migrado de localStorage pro banco (tabela
+// crm_leads) — achado da varredura ampla (docs/relatorio-varredura-ampla-
+// 17-08-2026.md). Leads agora são compartilhados entre a equipe e têm
+// backup real. PIN também passou a ser verificado no servidor (ver
+// app/api/crm/auth/route.ts) em vez de comparado no navegador.
 export default function CrmPage() {
-  const [auth, setAuth] = useState(false)
+  // null = ainda checando sessão, false = precisa logar, true = logado
+  const [auth, setAuth] = useState<boolean | null>(null)
   const [pin, setPin] = useState("")
   const [pinError, setPinError] = useState(false)
+  const [pinLoading, setPinLoading] = useState(false)
   const [leads, setLeads] = useState<Lead[]>([])
   const [modal, setModal] = useState<Lead | null>(null)
   const [search, setSearch] = useState("")
   const [filterStage, setFilterStage] = useState("todos")
   const [view, setView] = useState<"kanban" | "lista">("kanban")
 
-  useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY)
-    if (saved) setLeads(JSON.parse(saved))
-    const authed = sessionStorage.getItem("crm_auth")
-    if (authed === "1") setAuth(true)
-  }, [])
-
-  const save = (updated: Lead[]) => {
-    setLeads(updated)
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
-  }
-
-  const handleSave = (lead: Lead) => {
-    const existing = leads.find(l => l.id === lead.id)
-    if (existing) {
-      save(leads.map(l => l.id === lead.id ? lead : l))
-    } else {
-      save([lead, ...leads])
+  const load = async () => {
+    try {
+      const res = await fetch("/api/crm/leads")
+      if (res.status === 401) { setAuth(false); return }
+      const data = await res.json()
+      setLeads(data.leads ?? [])
+      setAuth(true)
+    } catch {
+      setAuth(false)
     }
   }
 
-  const handleMove = (id: string, stage: string) => {
-    save(leads.map(l => l.id === id ? { ...l, stage, last_contact: new Date().toISOString().slice(0, 10) } : l))
+  useEffect(() => { load() }, [])
+
+  const handleLogin = async () => {
+    setPinLoading(true); setPinError(false)
+    try {
+      const res = await fetch("/api/crm/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pin }),
+      })
+      if (!res.ok) { setPinError(true); setPinLoading(false); return }
+      setPin("")
+      await load()
+    } catch {
+      setPinError(true)
+    }
+    setPinLoading(false)
   }
 
-  const handleDelete = (id: string) => {
-    if (confirm("Excluir este lead?")) save(leads.filter(l => l.id !== id))
+  const leadPayload = (lead: Lead) => ({
+    name: lead.name, business_type: lead.business_type, city: lead.city,
+    phone: lead.phone, contact_name: lead.contact_name, stage: lead.stage,
+    notes: lead.notes, last_contact: lead.last_contact,
+  })
+
+  const handleSave = async (lead: Lead) => {
+    try {
+      if (lead.id) {
+        const res = await fetch(`/api/crm/leads/${lead.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(leadPayload(lead)),
+        })
+        const data = await res.json()
+        if (data.lead) setLeads(prev => prev.map(l => l.id === lead.id ? data.lead : l))
+      } else {
+        const res = await fetch("/api/crm/leads", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(leadPayload(lead)),
+        })
+        const data = await res.json()
+        if (data.lead) setLeads(prev => [data.lead, ...prev])
+      }
+    } catch {}
+  }
+
+  const handleMove = async (id: string, stage: string) => {
+    const today = new Date().toISOString().slice(0, 10)
+    setLeads(prev => prev.map(l => l.id === id ? { ...l, stage, last_contact: today } : l))
+    try {
+      await fetch(`/api/crm/leads/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ stage, last_contact: today }),
+      })
+    } catch {}
+  }
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Excluir este lead?")) return
+    setLeads(prev => prev.filter(l => l.id !== id))
+    try {
+      await fetch(`/api/crm/leads/${id}`, { method: "DELETE" })
+    } catch {}
   }
 
   const exportCSV = () => {
@@ -279,6 +336,13 @@ export default function CrmPage() {
     return matchSearch && matchStage
   })
 
+  // CHECANDO SESSÃO
+  if (auth === null) return (
+    <div style={{ minHeight: "100vh", background: BG, display: "flex", alignItems: "center", justifyContent: "center", color: TEXT2, fontFamily: "system-ui, sans-serif" }}>
+      Carregando…
+    </div>
+  )
+
   // LOGIN
   if (!auth) return (
     <div style={{ minHeight: "100vh", background: BG, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "system-ui, sans-serif" }}>
@@ -290,23 +354,16 @@ export default function CrmPage() {
           placeholder="Digite o PIN"
           value={pin}
           onChange={e => { setPin(e.target.value); setPinError(false) }}
-          onKeyDown={e => {
-            if (e.key === "Enter") {
-              if (pin === PIN) { setAuth(true); sessionStorage.setItem("crm_auth", "1") }
-              else setPinError(true)
-            }
-          }}
+          onKeyDown={e => { if (e.key === "Enter") handleLogin() }}
           style={{ width: "100%", background: BG, border: `1px solid ${pinError ? RED : BORDER}`, borderRadius: 10, padding: "12px 16px", color: TEXT, fontSize: 18, textAlign: "center", letterSpacing: 6, outline: "none", marginBottom: 12 }}
         />
         {pinError && <div style={{ fontSize: 13, color: RED, marginBottom: 12 }}>PIN incorreto</div>}
         <button
-          onClick={() => {
-            if (pin === PIN) { setAuth(true); sessionStorage.setItem("crm_auth", "1") }
-            else setPinError(true)
-          }}
-          style={{ width: "100%", padding: "12px", background: BLUE, border: "none", borderRadius: 10, color: "white", fontSize: 15, fontWeight: 700, cursor: "pointer" }}
+          onClick={handleLogin}
+          disabled={pinLoading}
+          style={{ width: "100%", padding: "12px", background: BLUE, border: "none", borderRadius: 10, color: "white", fontSize: 15, fontWeight: 700, cursor: pinLoading ? "not-allowed" : "pointer", opacity: pinLoading ? 0.7 : 1 }}
         >
-          Entrar
+          {pinLoading ? "Entrando…" : "Entrar"}
         </button>
       </div>
     </div>
