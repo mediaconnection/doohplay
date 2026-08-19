@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 
 const NAV_LINKS = [
@@ -229,6 +229,33 @@ function ModalDemo({ onClose }: { onClose: () => void }) {
 
 export default function LandingPage() {
   const [showDemo, setShowDemo] = useState(false)
+  // Achado adiado da varredura de 17/08/2026, resolvido em 18/08/2026: a
+  // tabela do ProofChain Explorer nesta página era 100% estática, sem
+  // nenhuma tentativa de puxar prova real nem aviso de "exemplo" — mesmo
+  // achado do bug já corrigido em app/explorer/page.tsx (usingDemoEvents),
+  // agora replicado aqui com a mesma API real.
+  const [explorerEvents, setExplorerEvents] = useState<any[]>([])
+  useEffect(() => {
+    fetch("/api/explorer/data").then(r => r.json()).then(d => setExplorerEvents(d.events ?? [])).catch(() => {})
+  }, [])
+  const DEMO_EXPLORER_ROWS = [
+    { hash: "0x7f2a...c4e1", tela: "SP-Centro-01", bloco: "#18,241,872", status: "Verificado", ok: true  },
+    { hash: "0x3b9c...f8d2", tela: "RJ-Copac-04",  bloco: "#18,241,871", status: "Verificado", ok: true  },
+    { hash: "0xac4f...1e73", tela: "BH-Savas-02",  bloco: "#18,241,870", status: "Verificado", ok: true  },
+    { hash: "0x2d8e...9b51", tela: "BSB-Pilot-07", bloco: "#18,241,869", status: "Pendente",   ok: false },
+    { hash: "0xf71b...4c29", tela: "CTB-Agua-03",  bloco: "#18,241,868", status: "Verificado", ok: true  },
+  ]
+  const usingDemoExplorerRows = explorerEvents.length === 0
+  // /api/explorer/data devolve { hash, screen, time, status } por evento —
+  // sem número de bloco por evento (blocos são uma entidade separada), por
+  // isso a coluna que era "Bloco" na versão fixa vira "Horário" com dado real.
+  const explorerRows = usingDemoExplorerRows ? DEMO_EXPLORER_ROWS : explorerEvents.slice(0, 5).map((e: any) => ({
+    hash: e.hash ?? "—",
+    tela: e.screen ?? "—",
+    bloco: e.time ?? "—",
+    status: e.status === "Verified" ? "Verificado" : "Pendente",
+    ok: e.status === "Verified",
+  }))
 
   return (
     <main style={{ minHeight: "100vh", background: "#080C18", color: "#fff", fontFamily: "'Inter', system-ui, sans-serif" }}>
@@ -535,6 +562,11 @@ export default function LandingPage() {
                 <div style={{ height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 2, overflow: "hidden" }}>
                   <div style={{ height: "100%", width: "70%", background: p.badgeColor, borderRadius: 2 }} />
                 </div>
+                {/* Achado adiado da varredura de 17/08/2026, resolvido em
+                    18/08/2026: números eram apresentados sem nenhum aviso de
+                    exemplo, mesmo achado já corrigido no dashboard ("Ganhos
+                    Futuros") e no AI Revenue Center — mesmo tratamento aqui. */}
+                <div style={{ fontSize: 9, color: "#475569", textAlign: "center", marginTop: 8 }}>Exemplo ilustrativo — não é garantia de resultado</div>
               </div>
               <div style={{ fontSize: 18, fontWeight: 700, marginBottom: "1rem", lineHeight: 1.3 }}>{p.title}</div>
               <div style={{ flex: 1, marginBottom: "1.5rem" }}>
@@ -628,18 +660,17 @@ export default function LandingPage() {
               Verificar hash
             </Link>
           </div>
+          {usingDemoExplorerRows && (
+            <div style={{ maxWidth: 900, margin: "0 auto 10px", textAlign: "right" }}>
+              <span style={{ fontSize: 10, fontWeight: 600, padding: "3px 10px", borderRadius: 20, background: "rgba(245,158,11,0.12)", color: "#F59E0B", border: "1px solid rgba(245,158,11,0.3)" }}>⚠ Dados de demonstração</span>
+            </div>
+          )}
           <div className="explorer-table" style={{ background: "#0A0F1E", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 16, overflow: "hidden", maxWidth: 900, margin: "0 auto" }}>
             <div style={{ display: "grid", gridTemplateColumns: "2fr 1.5fr 1.5fr 1fr", padding: "12px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)", fontSize: 11, color: "#475569", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-              <span>Hash</span><span>Tela</span><span>Bloco</span><span>Status</span>
+              <span>Hash</span><span>Tela</span><span>{usingDemoExplorerRows ? "Bloco" : "Horário"}</span><span>Status</span>
             </div>
-            {[
-              { hash: "0x7f2a...c4e1", tela: "SP-Centro-01", bloco: "#18,241,872", status: "Verificado", ok: true  },
-              { hash: "0x3b9c...f8d2", tela: "RJ-Copac-04",  bloco: "#18,241,871", status: "Verificado", ok: true  },
-              { hash: "0xac4f...1e73", tela: "BH-Savas-02",  bloco: "#18,241,870", status: "Verificado", ok: true  },
-              { hash: "0x2d8e...9b51", tela: "BSB-Pilot-07", bloco: "#18,241,869", status: "Pendente",   ok: false },
-              { hash: "0xf71b...4c29", tela: "CTB-Agua-03",  bloco: "#18,241,868", status: "Verificado", ok: true  },
-            ].map((row, i) => (
-              <div key={i} style={{ display: "grid", gridTemplateColumns: "2fr 1.5fr 1.5fr 1fr", padding: "13px 20px", borderBottom: i < 4 ? "1px solid rgba(255,255,255,0.04)" : "none", alignItems: "center" }}>
+            {explorerRows.map((row, i) => (
+              <div key={i} style={{ display: "grid", gridTemplateColumns: "2fr 1.5fr 1.5fr 1fr", padding: "13px 20px", borderBottom: i < explorerRows.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none", alignItems: "center" }}>
                 <span style={{ fontSize: 13, fontWeight: 500, color: "#6366F1", fontFamily: "monospace" }}>{row.hash}</span>
                 <span style={{ fontSize: 13, color: "#94A3B8" }}>{row.tela}</span>
                 <span style={{ fontSize: 13, color: "#64748B" }}>{row.bloco}</span>
