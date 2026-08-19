@@ -95,6 +95,19 @@ receptor compatível. Expansão pra mais praças e emissoras (SBT, Record)
 depende de fatores fora do nosso controle; acompanhamos ativamente e
 atualizamos essa comunicação conforme evolui.
 
+## Status da revisão jurídica (18/08/2026)
+
+Retomado como pendência da varredura de 17/08/2026. Não avancei além do
+que já estava documentado abaixo: fiz duas passadas de revisão de
+*conteúdo* (16/08/2026, incluindo uma à luz do art. 37 do CDC), mas
+"revisão jurídica formal" — o terceiro item da lista de pendências
+abaixo — não é algo que eu, como IA, posso concluir ou assinar. Isso
+exige um advogado real avaliando o texto antes de qualquer proposta
+formal a cliente, especialmente dado o histórico do projeto com a
+certificação ISO 27001 removida por reivindicação não sustentável
+(10-12/07/2026). Sigo tratando este item como aberto até o fundador
+decidir contratar essa revisão ou aceitar o risco conscientemente.
+
 ## Pendências / pontos que precisam de validação humana
 
 - [ ] Confirmar se algum valor de upgrade será cobrado por este selo, e

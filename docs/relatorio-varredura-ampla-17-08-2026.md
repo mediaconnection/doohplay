@@ -93,9 +93,15 @@ decisão de produto, não só uma correção mecânica de marca.
 
 Ainda pendentes de decisão, sem mudança nesta sessão:
 
-- SOC2/KPMG removido do Trust Center, mas nunca confirmado se a
-  certificação existe de verdade.
-- Revisão jurídica formal dos textos "TV 3.0 Ready" — nunca feita.
+- ~~SOC2/KPMG removido do Trust Center, mas nunca confirmado se a
+  certificação existe de verdade.~~ **Resolvido em 18/08/2026**:
+  fundador confirmou que não existe processo real com a KPMG — fica
+  removido definitivamente, sem alteração de código necessária (já
+  estava fora do ar desde 16/08/2026).
+- Revisão jurídica formal dos textos "TV 3.0 Ready" — nunca feita. Ver
+  nota em 18/08/2026 no próprio `docs/tv-3-0-ready-textos-comerciais.md`:
+  isso exige um advogado de verdade, não é algo que eu (IA) possa
+  concluir sozinho.
 - Cards de stats da seção PERSONAS e tabela de exemplo do ProofChain
   Explorer na landing page real — marcados como exemplo, mas nunca
   formalmente revisados por completo.
