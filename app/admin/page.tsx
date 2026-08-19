@@ -2547,6 +2547,96 @@ function TabFrota({ data }: { data: any }) {
   )
 }
 
+// ── Central de Controle · Rede ao Vivo (18/08/2026) ──────────────────────────
+// Inspirada na tela "Central de Controle" do protótipo Figma Make, mas só com
+// dado real: status vem de players.last_ping (mesma regra de online/idle/
+// offline já usada em /api/admin/network-map), sem contador de audiência,
+// receita por tela ou nomes de cliente fictícios como no protótipo — hoje só
+// existe 1 cliente pagante real (BARBE332), então a lista fica curta mesmo.
+// Cresce sozinha conforme mais telas entrarem na rede.
+function TabCentralControle() {
+  const [rows, setRows] = useState<any[]>([])
+  const [summary, setSummary] = useState({ total: 0, online: 0, idle: 0, offline: 0 })
+  const [loading, setLoading] = useState(true)
+
+  const load = () => {
+    setLoading(true)
+    fetch("/api/admin/network-map").then(r => r.json()).then(d => {
+      setRows(d.players ?? [])
+      setSummary(d.summary ?? { total: 0, online: 0, idle: 0, offline: 0 })
+    }).catch(() => { setRows([]) }).finally(() => setLoading(false))
+  }
+  useEffect(() => { load(); const t = setInterval(load, 30000); return () => clearInterval(t) }, [])
+
+  const statusColor = (s: string) => s === "online" ? GREEN : s === "idle" ? AMBER : MUTED
+  const statusLabel = (s: string) => s === "online" ? "Online" : s === "idle" ? "Ociosa" : "Offline"
+
+  const timeAgo = (iso: string | null) => {
+    if (!iso) return "nunca"
+    const diffMs = Date.now() - new Date(iso).getTime()
+    const min = Math.floor(diffMs / 60000)
+    if (min < 1) return "agora"
+    if (min < 60) return `${min}min atrás`
+    const h = Math.floor(min / 60)
+    if (h < 24) return `${h}h atrás`
+    return `${Math.floor(h / 24)}d atrás`
+  }
+
+  if (loading) return <div style={{ color: TEXT2, fontSize: 13, padding: "40px 0", textAlign: "center" }}>Carregando rede…</div>
+
+  return (
+    <div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+        <div>
+          <div style={{ fontSize: 16, fontWeight: 700, color: TEXT }}>Central de Controle · Rede ao Vivo</div>
+          <div style={{ fontSize: 12, color: TEXT2, marginTop: 2 }}>Status real das telas conectadas — atualiza a cada 30s</div>
+        </div>
+        <button onClick={load} style={{ background: SURFACE, border: "1px solid " + BORDER, borderRadius: 8, padding: "6px 14px", fontSize: 12, color: TEXT2, cursor: "pointer" }}>↻ Atualizar</button>
+      </div>
+
+      <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 28 }}>
+        <KpiCard label="Total de telas" value={summary.total} />
+        <KpiCard label="Online"  value={summary.online}  color={GREEN} />
+        <KpiCard label="Ociosas" value={summary.idle}    color={AMBER} />
+        <KpiCard label="Offline" value={summary.offline} color={MUTED} />
+      </div>
+
+      {rows.length === 0 ? (
+        <div style={{ background: SURFACE, border: "1px solid " + BORDER, borderRadius: 12, padding: "48px 24px", textAlign: "center" }}>
+          <div style={{ fontSize: 32, marginBottom: 10 }}>📡</div>
+          <div style={{ fontSize: 14, color: TEXT, fontWeight: 600, marginBottom: 6 }}>Nenhuma tela com localização cadastrada ainda</div>
+          <div style={{ fontSize: 12, color: TEXT2 }}>Assim que uma tela tiver latitude/longitude e enviar heartbeat, ela aparece aqui.</div>
+        </div>
+      ) : (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 14 }}>
+          {rows.map((p: any) => (
+            <div key={p.id} style={{ background: SURFACE, border: "1px solid " + BORDER, borderRadius: 12, padding: "16px 18px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: TEXT, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.client_name ?? p.name ?? "Tela sem cliente"}</div>
+                  <div style={{ fontSize: 11, color: TEXT2, marginTop: 2 }}>{p.location ?? "Localização não informada"}</div>
+                </div>
+                <span style={{ flexShrink: 0, fontSize: 10, fontWeight: 700, padding: "3px 9px", borderRadius: 20, background: statusColor(p.status) + "22", color: statusColor(p.status), border: "1px solid " + statusColor(p.status) + "44", display: "flex", alignItems: "center", gap: 4 }}>
+                  <span style={{ width: 6, height: 6, borderRadius: "50%", background: statusColor(p.status) }} />
+                  {statusLabel(p.status)}
+                </span>
+              </div>
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                {p.client_code && <span style={{ fontSize: 10, background: BORDER, color: TEXT2, padding: "2px 8px", borderRadius: 10 }}>{p.client_code}</span>}
+                {p.platform && <span style={{ fontSize: 10, background: BORDER, color: TEXT2, padding: "2px 8px", borderRadius: 10 }}>{p.platform}</span>}
+                {p.device_type && <span style={{ fontSize: 10, background: BORDER, color: TEXT2, padding: "2px 8px", borderRadius: 10 }}>{p.device_type}</span>}
+              </div>
+              <div style={{ fontSize: 11, color: TEXT2, marginTop: 10, borderTop: "1px solid " + BORDER, paddingTop: 8 }}>
+                Último sinal: {timeAgo(p.last_ping)}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ── Templates de tela (Fase 3b) — widgets de clima/bolsa/notícias ──
 function TabTemplates({ data }: { data: any }) {
   const { clients } = data
@@ -3546,6 +3636,7 @@ export default function AdminPage() {
     { id: "institucional", label: "Institucional", icon: "🏢" },
     { id: "templates",   label: "Templates",   icon: "🖼️" },
     { id: "frota",       label: "Frota",       icon: "🖥️" },
+    { id: "central",     label: "Central de Controle", icon: "📡" },
     { id: "enquetes",    label: "Enquetes",    icon: "🗳️" },
     { id: "alertas",     label: "Alertas",     icon: "🚨", count: pendingAlerts, alert: pendingAlerts > 0 },
     { id: "eventos",     label: "Eventos",     icon: "⚡" },
@@ -3598,6 +3689,7 @@ export default function AdminPage() {
         {tab === "institucional" && <TabInstitucional />}
         {tab === "templates"    && <TabTemplates data={data} />}
         {tab === "frota"        && <TabFrota data={data} />}
+        {tab === "central"      && <TabCentralControle />}
         {tab === "enquetes"     && <TabEnquetes data={data} />}
         {tab === "alertas"     && <TabAlertas     data={data} onRefresh={load} />}
         {tab === "eventos"     && <TabEventos     data={data} />}
