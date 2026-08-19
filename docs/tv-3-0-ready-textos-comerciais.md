@@ -108,6 +108,12 @@ certificação ISO 27001 removida por reivindicação não sustentável
 (10-12/07/2026). Sigo tratando este item como aberto até o fundador
 decidir contratar essa revisão ou aceitar o risco conscientemente.
 
+**Decisão do fundador (18/08/2026):** aceitar o risco por enquanto. Os
+textos seguem valendo pra uso informal (o cuidado de conteúdo já
+existente é considerado suficiente por ora), mas continuam sem revisão
+jurídica formal — não usar em proposta comercial formal a cliente
+pagante até essa revisão acontecer ou o fundador decidir de outra forma.
+
 ## Pendências / pontos que precisam de validação humana
 
 - [ ] Confirmar se algum valor de upgrade será cobrado por este selo, e
